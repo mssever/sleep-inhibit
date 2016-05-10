@@ -1,2 +1,10 @@
 # sleep-inhibit
-A small indicator to prevent your Linux computer from sleeping
+A small indicator to prevent your Linux computer from sleeping. It works by
+creating an icon and a menu where you can choose to inhibit sleep or not. There
+are preferences available to autostart, to start in inhibit mode, and to control
+what Sleep Inhibit does when you're running on battery.
+
+# Dependencies
+Sleep Inhibit requires xdotool and xprintidle to be installed as commands on
+your $PATH. If you want to modify behavior based on whether you're running on
+battery, you'll also need the acpi command available.

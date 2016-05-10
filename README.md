@@ -8,3 +8,8 @@ what Sleep Inhibit does when you're running on battery.
 Sleep Inhibit requires xdotool and xprintidle to be installed as commands on
 your $PATH. If you want to modify behavior based on whether you're running on
 battery, you'll also need the acpi command available.
+
+##Temporary dependency
+Until I'm able to sort out an issue I'm having with setting my own icons, there's
+an additional dependency on caffeine-plus, whose icons I'm currently using. This
+dependency will be removed as soon as possible.

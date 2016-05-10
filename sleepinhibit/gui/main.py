@@ -32,23 +32,23 @@ class SleepInhibitGUI(GObject):
     def __init__(self):
         GObject.__init__(self)
         self.inhibited = False
-        self._add_indicator()
+        self.appname = 'sleep-inhibit'
+        self.icon_on = util.app_icon('indicator_no_sleep', False)
+        self.icon_off = util.app_icon('indicator_sleep', False)
         self.inhibit_proc = None
         self.config = get_settings()
         SleepInhibitGUI.instance = self
         self.settings_dialog = None
+        self._add_indicator()
         win = Gtk.Window()
         win.set_default_icon(util.app_icon('window_icon'))
 
     def _add_indicator(self):
         self.icon_path = '{}/img'.format(get_settings().program_dir)
-        self.AppInd = AppIndicator3.Indicator.new("sleep-inhibit-off",
-                                                  "sleep-inhibit",
+        self.AppInd = AppIndicator3.Indicator.new(self.appname,
+                                                  self.icon_off,
                                                   AppIndicator3.IndicatorCategory.APPLICATION_STATUS)
         self.AppInd.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
-        self.AppInd.set_icon_theme_path(self.icon_path)
-        self.AppInd.set_icon("caffeine-cup-empty")
-
         self._build_indicator_menu(self.AppInd)
 
     def _build_indicator_menu(self, indicator):
@@ -135,12 +135,12 @@ class SleepInhibitGUI(GObject):
 
 
     def _set_icon_disabled(self, menuitem):
-        self.AppInd.set_icon('caffeine-cup-empty')#(util.app_icon('indicator_sleep'))
+        self.AppInd.set_icon(self.icon_off)
         if menuitem:
             menuitem.set_label('Inhibit Sleep')
 
     def _set_icon_enabled(self, menuitem):
-        self.AppInd.set_icon('caffeine-cup-full')#(util.app_icon('indicator_no_sleep'))
+        self.AppInd.set_icon(self.icon_on)
         if menuitem:
             menuitem.set_label('Enable Sleep')
 

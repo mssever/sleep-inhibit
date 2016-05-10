@@ -21,10 +21,10 @@ import subprocess
 import time
 from sleepinhibit import battery as battery_module
 from sleepinhibit.util import cmd_output
+from sleepinhibit.settings import get_settings
 
 def run(battery=False, percent=None):
-    print(repr({'battery': battery, 'percent': percent}))
-    minutes = 3 # number of minutes of inactivity between activating keyboard
+    minutes = get_settings().inhibitor_interval # number of minutes of inactivity between activating keyboard
     milliseconds = minutes * 60 * 1000
     press_ctrl = ["xdotool", "key", "Control_L"]
     while True:

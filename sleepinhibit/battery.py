@@ -37,5 +37,4 @@ def info():
     o = re.search(r'([0-9]+)%', data)
     if o:
         output['percent'] = int(o.group(1))
-    #print(repr(output))
     return output

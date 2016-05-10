@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import json
 import subprocess
 
 from gi.repository.GObject import GObject
@@ -46,7 +47,6 @@ class SleepInhibitGUI(GObject):
                                                   AppIndicator3.IndicatorCategory.APPLICATION_STATUS)
         self.AppInd.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
         self.AppInd.set_icon_theme_path(self.icon_path)
-        #print(self.AppInd.get_icon_theme_path())
         self.AppInd.set_icon("caffeine-cup-empty")
 
         self._build_indicator_menu(self.AppInd)
@@ -81,7 +81,6 @@ class SleepInhibitGUI(GObject):
         indicator.set_menu(menu)
 
     def on_toggle(self, menuitem=None):
-        print(repr(menuitem))
         self.inhibited = not self.inhibited
         if self.inhibited:
             self._set_icon_enabled(menuitem)
@@ -117,20 +116,18 @@ class SleepInhibitGUI(GObject):
         exit(0)
 
     def on_about(self, menuitem):
+        config = get_settings()
+        with open(config.program_dir + '/data/credits.json') as f:
+            credits = json.loads(f.read())
         about = Gtk.AboutDialog()
         about.set_program_name("Sleep Inhibitor")
-        #about.set_version("1.0")
+        about.set_version(config.version)
         about.set_comments("Prevent your computer from going to sleep.")
         #about.set_website("http://www.learngtk.org/")
         #about.set_website_label("LearnGTK Website")
-        about.set_authors([
-            "<a href=\"http://www.scottseverance.us/\">Scott Severance</a> (this actual program)",
-            "Jacob Vlijm (general approach to inhibiting sleep)",
-            "The Caffeine Developers (inspiration, GUI code portions)"])
-        about.set_artists([
-            'Icons: <a href="http://www.flaticon.com/authors/sean-mccormick">Sean McCormick</a>, licensed as <a href="http://creativecommons.org/licenses/by/3.0/">CC 3.0 BY</a>',
-            'Icons modified by Scott Severance'])
-        about.set_copyright('© 2016 by Scott Severance')
+        about.set_authors(credits['authors'])
+        about.set_artists(credits['artists'])
+        about.set_copyright(credits['copyright'])
         about.set_license_type(Gtk.License.GPL_3_0)
 
         about.run()

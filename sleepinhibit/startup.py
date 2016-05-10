@@ -101,7 +101,6 @@ def main():
     elif args.mode == 'inhibit-process':
         from sleepinhibit.inhibitor import run
         kw = {}
-        print(repr(args))
         if args.battery is True:
             kw['battery'] = True
             if args.percent:

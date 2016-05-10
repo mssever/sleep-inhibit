@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Sleep Inhibitor
+Exec={program_path}
+Icon={icon_path}/window_icon.png
+Comment=Prevent your computer from going to sleep.
+X-GNOME-Autostart-enabled=true

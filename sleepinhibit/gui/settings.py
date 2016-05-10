@@ -101,7 +101,6 @@ class SettingsDialog(Gtk.Window):
             pct = parent.config.batt_percent
         else:
             pct = 85
-        print(pct)
         pct_button = Gtk.SpinButton()
         self.pct_button = pct_button
         pct_adj = Gtk.Adjustment(pct, 0, 100, 5, 10, 0)
@@ -127,9 +126,6 @@ class SettingsDialog(Gtk.Window):
             if not pct_enable_switch.props.active:
                 pct_button.props.sensitive = False
                 pct_label.props.sensitive = False
-        
-        #self.show()
-        print(repr(parent.config))
 
     def on_start_inhibited_toggle(self, switch, gparm):
         config = get_settings()
@@ -139,15 +135,11 @@ class SettingsDialog(Gtk.Window):
     def on_autostart_toggle(self, switch, gparm):
         config = get_settings()
         filename = config.desktop_filename
-        file_cont = '''[Desktop Entry]
-Type=Application
-Name=Sleep Inhibitor
-Exec={}
-Icon=caffeine-cup-full
-Comment=Prevent your computer from going to sleep.
-X-GNOME-Autostart-enabled=true
-'''.format(config.start_file)
         if switch.props.active:
+            with open(os.path.join(config.program_dir, 'data/sleep-inhibit.desktop.template')) as f:
+                file_cont = f.read()
+            file_cont = file_cont.format(program_path=config.start_file,
+                                         icon_path=os.path.join(config.program_dir, 'img'))
             with open(filename, 'w') as f:
                 f.write(file_cont)
             os.chmod(filename, 0o755)
@@ -191,7 +183,6 @@ X-GNOME-Autostart-enabled=true
             new_value = button.get_value_as_int()
             old_value = self.old_pct_value
             if (new_value != old_value) and (config.batt_percent != new_value):
-                print(repr({'old_value': old_value, 'new_value': new_value}))
                 self.old_value = new_value
                 config.batt_percent = new_value
                 config.save_settings()

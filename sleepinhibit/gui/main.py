@@ -125,7 +125,7 @@ class SleepInhibitGUI(GObject):
         #about.set_website_label("LearnGTK Website")
         about.set_authors([
             "<a href=\"http://www.scottseverance.us/\">Scott Severance</a> (this actual program)",
-            "Jacob Vliem (general approach to inhibiting sleep)",
+            "Jacob Vlijm (general approach to inhibiting sleep)",
             "The Caffeine Developers (inspiration, GUI code portions)"])
         about.set_artists([
             'Icons: <a href="http://www.flaticon.com/authors/sean-mccormick">Sean McCormick</a>, licensed as <a href="http://creativecommons.org/licenses/by/3.0/">CC 3.0 BY</a>',

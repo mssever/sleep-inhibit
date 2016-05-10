@@ -30,8 +30,8 @@ if __name__ != '__main__':
     raise ImportError('This is the main module. It is not meant to be imported.')
 
 config = get_settings()
-config.start_file = __file__
-config.program_dir = '{}/sleepinhibit'.format(os.path.dirname(__file__))
+config.start_file = os.path.realpath(__file__)
+config.program_dir = '{}/sleepinhibit'.format(os.path.dirname(os.path.realpath(__file__)))
 config.desktop_filename = '{}/.config/autostart/sleep_inhibit.desktop'.format(os.environ['HOME'])
 
 #print(config)

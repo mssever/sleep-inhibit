@@ -47,7 +47,7 @@ class SleepInhibitGUI(GObject):
         self.AppInd.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
         self.AppInd.set_icon_theme_path(self.icon_path)
         #print(self.AppInd.get_icon_theme_path())
-        self.AppInd.set_icon('{}/{}'.format(self.icon_path, 'indicator-no-sleep'))#"caffeine-cup-empty")#(util.app_icon('indicator_sleep'))
+        self.AppInd.set_icon("caffeine-cup-empty")
 
         self._build_indicator_menu(self.AppInd)
 
@@ -138,12 +138,12 @@ class SleepInhibitGUI(GObject):
 
 
     def _set_icon_disabled(self, menuitem):
-        self.AppInd.set_icon('indicator-sleep')#'caffeine-cup-empty')#(util.app_icon('indicator_sleep'))
+        self.AppInd.set_icon('caffeine-cup-empty')#(util.app_icon('indicator_sleep'))
         if menuitem:
             menuitem.set_label('Inhibit Sleep')
 
     def _set_icon_enabled(self, menuitem):
-        self.AppInd.set_icon('indicator-no-sleep')#'caffeine-cup-full')#(util.app_icon('indicator_no_sleep'))
+        self.AppInd.set_icon('caffeine-cup-full')#(util.app_icon('indicator_no_sleep'))
         if menuitem:
             menuitem.set_label('Enable Sleep')
 

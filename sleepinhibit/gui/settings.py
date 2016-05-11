@@ -26,22 +26,15 @@ class SettingsDialog(Gtk.Window):
     
     def __init__(self, parent):
         Gtk.Window.__init__(self, title='Sleep Inhibitor Settings')
-        #Gtk.Dialog.__init__(self, "Sleep Inhibitor Settings", parent, 0,
-        #    (Gtk.STOCK_OK, Gtk.ResponseType.OK))
-        #self.parent = parent
-        #self.set_default_size(150, 100)
-
-        #label = Gtk.Label("This is a dialog to display additional information")
-
+        config = get_settings()
+        
         self.parent = parent
         self.props.gravity = Gdk.Gravity.CENTER
         self.props.resizable = False
         self.set_border_width(6)
         grid = Gtk.Grid()
         grid.set_row_spacing(20)
-        #grid.set_column_homogeneous(True)
         self.add(grid)
-        #self.icon-name('caffeine-cup-full')
         separator = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL)
 
         row_counter = 0
@@ -71,6 +64,17 @@ class SettingsDialog(Gtk.Window):
         grid.attach(autostart_label, 0, row_counter, 1, 1)
         grid.attach(autostart_switch, 1, row_counter, 1, 1)
         row_counter += 1
+
+        if not config.acpi_available:
+            grid.attach(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL), 0, row_counter, 2, 1)
+            acpi_label_txt = '''<big>The options below are disabled because you don't have the <tt>acpi</tt> command
+installed on your system. If you want Sleep Inhibit to take the battery state into
+consideration, please install the <tt>acpi</tt> command and restart Sleep Inhibit.</big>'''
+            acpi_label = Gtk.Label()
+            acpi_label.set_markup(acpi_label_txt)
+            acpi_label.set_line_wrap(True)
+            grid.attach(acpi_label, 0, row_counter+1, 2, 1)
+            row_counter += 2
         
         battery_switch = Gtk.Switch()
         self.battery_switch = battery_switch
@@ -117,7 +121,12 @@ class SettingsDialog(Gtk.Window):
         grid.attach(pct_button, 1, row_counter, 1, 1)
         row_counter += 1
 
-        if battery_switch.props.active:
+        close = Gtk.Button.new_from_stock(Gtk.STOCK_CLOSE)
+        close.connect('clicked', self.on_close)
+        grid.attach(close, 1, row_counter, 1, 1)
+        row_counter += 1
+
+        if battery_switch.props.active or not config.acpi_available:
             pct_enable_switch.props.sensitive = False
             pct_enable_label.props.sensitive = False
             pct_button.props.sensitive = False 
@@ -126,6 +135,9 @@ class SettingsDialog(Gtk.Window):
             if not pct_enable_switch.props.active:
                 pct_button.props.sensitive = False
                 pct_label.props.sensitive = False
+        if not config.acpi_available:
+            battery_switch.props.sensitive = False
+            battery_label.props.sensitive = False
 
     def on_start_inhibited_toggle(self, switch, gparm):
         config = get_settings()
@@ -164,6 +176,9 @@ class SettingsDialog(Gtk.Window):
             self.pct_button.props.sensitive = False
             self.pct_label.props.sensitive = False
 
+    def on_close(self, button):
+        self.hide()
+    
     def on_pct_enable_toggle(self, switch, gparm):
         config = get_settings()
         config.battery_percent_enabled = switch.props.active

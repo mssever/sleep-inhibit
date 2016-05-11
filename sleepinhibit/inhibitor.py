@@ -24,13 +24,14 @@ from sleepinhibit.util import cmd_output
 from sleepinhibit.settings import get_settings
 
 def run(battery=False, percent=None):
-    minutes = get_settings().inhibitor_interval # number of minutes of inactivity between activating keyboard
+    config = get_settings()
+    minutes = config.inhibitor_interval # number of minutes of inactivity between activating keyboard
     milliseconds = minutes * 60 * 1000
     press_ctrl = ["xdotool", "key", "Control_L"]
     while True:
         curr_idle = int(cmd_output(["xprintidle"]))
         if curr_idle > milliseconds:
-            if battery:
+            if config.acpi_available and battery:
                 batt = battery_module.info()
                 if batt['discharging']:
                     if percent and batt['percent'] and batt['percent'] >= percent:

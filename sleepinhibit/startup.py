@@ -72,10 +72,12 @@ def parse_args():
 
 def main():
     args = parse_args()
+    config = settings.get_settings()
     if not dependencies_are_satisfied():
         return 'This program depends on xprintidle and xdotool being installed.'
-    if args.battery and not battery.acpi_available():
-        return '--battery is only available if you have the acpi command on your system.'
+    #if args.battery and not battery.acpi_available():
+    #    return '--battery is only available if you have the acpi command on your system.'
+    config.acpi_available = battery.acpi_available()
     if args.delete:
         config = settings.get_settings()
         for file_ in (config.config_file, config.desktop_filename):
@@ -85,7 +87,6 @@ def main():
                 pass
         return 0
     elif args.mode == 'indicator':
-        config = settings.get_settings()
         if args.battery is not None:
             config.battery = args.battery
         if args.percent is not None:

@@ -25,15 +25,19 @@ def cmd_output(*args, **kwargs):
     '''Wrap subprocess.check_output to avoid having to do conversions, strip, etc.'''
     return subprocess.check_output(*args, **kwargs).decode('utf-8').strip()
 
-def app_icon(which):
+def app_icon(which, return_pixbuf=True):
+    '''if return_pixbuf is False, returns the path as a str'''
     icon_dir = '{}/img/{{}}'.format(get_settings().program_dir)
     if which == 'window_icon':
         icon = icon_dir.format('window_icon.png')
     elif which == 'indicator_sleep':
-        icon = icon_dir.format('indicator_sleep.png')
+        icon = icon_dir.format('indicator_sleep.svg')
     elif which == 'indicator_no_sleep':
-        icon = icon_dir.format('indicator_no_sleep.png')
-    with open(icon, 'rb') as f:
-        img = f.read()
-    input_stream = Gio.MemoryInputStream.new_from_data(img, None)
-    return GdkPixbuf.Pixbuf.new_from_stream(input_stream, None) 
+        icon = icon_dir.format('indicator_no_sleep.svg')
+    if return_pixbuf:
+        with open(icon, 'rb') as f:
+            img = f.read()
+        input_stream = Gio.MemoryInputStream.new_from_data(img, None)
+        return GdkPixbuf.Pixbuf.new_from_stream(input_stream, None)
+    else:
+        return icon

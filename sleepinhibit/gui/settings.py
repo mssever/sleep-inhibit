@@ -18,7 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-from gi.repository import Gtk, Gdk, GLib
+from gi.repository import Gtk, Gdk, GLib, GdkPixbuf
 from sleepinhibit import util
 from sleepinhibit.settings import get_settings
 
@@ -42,10 +42,34 @@ class SettingsDialog(Gtk.Window):
         icon = Gtk.Image.new_from_pixbuf(util.app_icon('window_icon'))
         grid.attach(icon, 0, row_counter, 2, 1)
         row_counter += 1
+
+        icon_label = Gtk.Label('Which indicator icon set do you want to use?')
+        icon_label.set_halign(Gtk.Align.START)
+        icon_light = Gtk.ToggleButton()
+        icon_light_img = Gtk.Image.new_from_pixbuf(util.app_icon('indicator_sleep', theme='light').scale_simple(22, 22, GdkPixbuf.InterpType.BILINEAR))
+        icon_light.set_image(icon_light_img)
+        icon_dark = Gtk.ToggleButton()
+        icon_dark.set_image(Gtk.Image.new_from_pixbuf(util.app_icon('indicator_sleep', theme='dark').scale_simple(22, 22, GdkPixbuf.InterpType.BILINEAR)))
+        self.icon_light = icon_light
+        self.icon_dark = icon_dark
+        if config.icon_theme == 'light':
+            icon_light.props.active = True
+            icon_dark.props.active = False
+        else:
+            icon_light.props.active = False
+            icon_dark.props.active = True
+        icon_light.connect('notify::active', self.on_icon_light_toggled)
+        icon_dark.connect('notify::active', self.on_icon_dark_toggled)
+        icon_grid = Gtk.Grid()
+        icon_grid.attach(icon_light, 0, 0, 1, 1)
+        icon_grid.attach(icon_dark, 1, 0, 1, 1)
+        grid.attach(icon_label, 0, row_counter, 1, 1)
+        grid.attach(icon_grid, 1, row_counter, 1, 1)
+        row_counter += 1
         
         inhibited_switch = Gtk.Switch()
         self.inhibited_switch = inhibited_switch
-        inhibited_switch.set_active(parent.config.start_inhibited)
+        inhibited_switch.set_active(config.start_inhibited)
         inhibited_switch.connect('notify::active', self.on_start_inhibited_toggle)
         inhibited_label = Gtk.Label('Start Sleep Inhibitor in inhibited mode: ')
         self.inhibited_label = inhibited_label
@@ -56,7 +80,7 @@ class SettingsDialog(Gtk.Window):
 
         autostart_switch = Gtk.Switch()
         self.autostart_switch = autostart_switch
-        autostart_switch.set_active(parent.config.autostart)
+        autostart_switch.set_active(config.autostart)
         autostart_switch.connect('notify::active', self.on_autostart_toggle)
         autostart_label = Gtk.Label('Automatically start Sleep Inhibitor when you log in: ')
         self.autostart_label = autostart_label
@@ -78,7 +102,7 @@ consideration, please install the <tt>acpi</tt> command and restart Sleep Inhibi
         
         battery_switch = Gtk.Switch()
         self.battery_switch = battery_switch
-        battery_switch.set_active(not parent.config.battery)
+        battery_switch.set_active(not config.battery)
         battery_switch.connect('notify::active', self.on_battery_toggle)
         battery_label = Gtk.Label("Always inhibit sleep when on battery: ")
         self.battery_label = battery_label
@@ -92,7 +116,7 @@ consideration, please install the <tt>acpi</tt> command and restart Sleep Inhibi
 
         pct_enable_switch = Gtk.Switch()
         self.pct_enable_switch = pct_enable_switch
-        pct_enable_switch.set_active(parent.config.battery_percent_enabled)
+        pct_enable_switch.set_active(config.battery_percent_enabled)
         pct_enable_switch.connect('notify::active', self.on_pct_enable_toggle)
         pct_enable_label = Gtk.Label("When on battery, inhibit if the battery is at least the level below: ")
         pct_enable_label.set_halign(Gtk.Align.START)
@@ -101,8 +125,8 @@ consideration, please install the <tt>acpi</tt> command and restart Sleep Inhibi
         grid.attach(pct_enable_switch, 1, row_counter, 1, 1)
         row_counter += 1
 
-        if parent.config.batt_percent is not None:
-            pct = parent.config.batt_percent
+        if config.batt_percent is not None:
+            pct = config.batt_percent
         else:
             pct = 85
         pct_button = Gtk.SpinButton()
@@ -178,6 +202,20 @@ consideration, please install the <tt>acpi</tt> command and restart Sleep Inhibi
 
     def on_close(self, button):
         self.hide()
+
+    def on_icon_light_toggled(self, button, gparm):
+        with self.icon_light.freeze_notify():
+            with self.icon_dark.freeze_notify():
+                if self.icon_light.props.active:
+                    self.icon_dark.props.active = False
+                    self.set_icon_theme('light')
+
+    def on_icon_dark_toggled(self, button, gparm):
+        with self.icon_light.freeze_notify():
+            with self.icon_dark.freeze_notify():
+                if self.icon_dark.props.active:
+                    self.icon_light.props.active = False
+                    self.set_icon_theme('dark')
     
     def on_pct_enable_toggle(self, switch, gparm):
         config = get_settings()
@@ -206,3 +244,20 @@ consideration, please install the <tt>acpi</tt> command and restart Sleep Inhibi
         GLib.timeout_add(priority=GLib.PRIORITY_DEFAULT,
                          interval=5000,
                          function=change_timeout)
+
+    def set_icon_theme(self, theme):
+        config = get_settings()
+        if theme == 'dark':
+            config.icon_theme = 'dark'
+            config.save_settings()
+            self.parent.icon_on = util.app_icon('indicator_no_sleep', False, 'dark')
+            self.parent.icon_off = util.app_icon('indicator_sleep', False, 'dark')
+        else:
+            config.icon_theme = 'light'
+            config.save_settings()
+            self.parent.icon_on = util.app_icon('indicator_no_sleep', False, 'light')
+            self.parent.icon_off = util.app_icon('indicator_sleep', False, 'light')
+        if self.parent.inhibited:
+            self.parent.set_icon_enabled(False)
+        else:
+            self.parent.set_icon_disabled(False)

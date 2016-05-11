@@ -31,12 +31,12 @@ class SleepInhibitGUI(GObject):
 
     def __init__(self):
         GObject.__init__(self)
+        config = get_settings()
         self.inhibited = False
         self.appname = 'sleep-inhibit'
-        self.icon_on = util.app_icon('indicator_no_sleep', False, 'dark')
-        self.icon_off = util.app_icon('indicator_sleep', False, 'dark')
+        self.icon_on = util.app_icon('indicator_no_sleep', False, config.icon_theme)
+        self.icon_off = util.app_icon('indicator_sleep', False, config.icon_theme)
         self.inhibit_proc = None
-        self.config = get_settings()
         SleepInhibitGUI.instance = self
         self.settings_dialog = None
         self._add_indicator()
@@ -81,18 +81,19 @@ class SleepInhibitGUI(GObject):
         indicator.set_menu(menu)
 
     def on_toggle(self, menuitem=None):
+        config = get_settings()
         self.inhibited = not self.inhibited
         if self.inhibited:
-            self._set_icon_enabled(menuitem)
-            open_str = [self.config.start_file, "--mode=inhibit-process"]
-            if self.config.battery:
+            self.set_icon_enabled(menuitem)
+            open_str = [config.start_file, "--mode=inhibit-process"]
+            if config.battery:
                 open_str.append('--battery=True')
-            if self.config.battery_percent_enabled and self.config.batt_percent:
-                open_str.append('--percent={}'.format(self.config.batt_percent))
+            if config.battery_percent_enabled and config.batt_percent:
+                open_str.append('--percent={}'.format(config.batt_percent))
             self.inhibit_proc = subprocess.Popen(open_str)
         else:
             self.kill_inhibit_proc()
-            self._set_icon_disabled(menuitem)
+            self.set_icon_disabled(menuitem)
     
     def on_settings(self, menuitem=None):
         def destroy(window, event):
@@ -134,12 +135,12 @@ class SleepInhibitGUI(GObject):
         about.destroy()
 
 
-    def _set_icon_disabled(self, menuitem):
+    def set_icon_disabled(self, menuitem):
         self.AppInd.set_icon(self.icon_off)
         if menuitem:
             menuitem.set_label('Inhibit Sleep')
 
-    def _set_icon_enabled(self, menuitem):
+    def set_icon_enabled(self, menuitem):
         self.AppInd.set_icon(self.icon_on)
         if menuitem:
             menuitem.set_label('Enable Sleep')

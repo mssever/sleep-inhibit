@@ -33,8 +33,8 @@ class SleepInhibitGUI(GObject):
         GObject.__init__(self)
         self.inhibited = False
         self.appname = 'sleep-inhibit'
-        self.icon_on = util.app_icon('indicator_no_sleep', False)
-        self.icon_off = util.app_icon('indicator_sleep', False)
+        self.icon_on = util.app_icon('indicator_no_sleep', False, 'dark')
+        self.icon_off = util.app_icon('indicator_sleep', False, 'dark')
         self.inhibit_proc = None
         self.config = get_settings()
         SleepInhibitGUI.instance = self

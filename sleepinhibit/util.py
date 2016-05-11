@@ -25,9 +25,13 @@ def cmd_output(*args, **kwargs):
     '''Wrap subprocess.check_output to avoid having to do conversions, strip, etc.'''
     return subprocess.check_output(*args, **kwargs).decode('utf-8').strip()
 
-def app_icon(which, return_pixbuf=True):
+def app_icon(which, return_pixbuf=True, theme=None):
     '''if return_pixbuf is False, returns the path as a str'''
+    if 'indicator' in which and not theme:
+        raise ValueError('Indicator icons must have a theme specified')
     icon_dir = '{}/img/{{}}'.format(get_settings().program_dir)
+    if theme:
+        icon_dir = icon_dir.format('{}/{{}}'.format(theme))
     if which == 'window_icon':
         icon = icon_dir.format('window_icon.png')
     elif which == 'indicator_sleep':

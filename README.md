@@ -11,13 +11,7 @@ You can use the preferences dialog to configure autostart if you want.
 No installation is necessary. Just:
 
 1. Place the app directory wherever you want the app to live. Having it on your `$PATH` is *not* necessary.
-2. Install the dependencies:
-
-        # For Ubuntu. For other distros, do what's necessary to ensure these commands are on your system.
-        sudo apt install xdotool xprintidle
-        
-    If you're using a laptop, you will also want `acpi`.
-    
+2. Install the dependencies (see below)
 3. From the directory you installed, run `sleep_inhibit`.
 4. If you want the app to automatically start every time you log in, open the icon's menu, select Preferences, and enable it in the preferences window.
 5. If you decide to uninstall it, quit Sleep Inhibit, then run `cleanup.py`, being sure to answer yes to all questions. Then delete the directory, and all traces will be gone.

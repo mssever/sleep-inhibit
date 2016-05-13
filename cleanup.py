@@ -67,6 +67,6 @@ except (KeyboardInterrupt, EOFError):
     exit('Canceled')
 if not cont:
     exit(0)
-cmd = ['{}/sleep_inhibit'.format(this_dir), '--delete']
+cmd = ['{}/sleep_inhibit.py'.format(this_dir), '--delete']
 #print(cmd)
 subprocess.call(cmd)

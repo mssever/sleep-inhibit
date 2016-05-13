@@ -22,26 +22,33 @@ This script deletes all the cruft from the project directory and makes a clean
 source directory.
 '''
 
+import argparse
 import os
 import re
 import subprocess
 
-try:
-    print(__doc__, 'Continue? [Y/n]:', sep='\n', end=' ')
-    ans = input()
-    cont = True
-    if re.search(r'^[nN]', ans.strip()):
-        cont = False
-except (KeyboardInterrupt, EOFError):
-    exit('Canceled')
-if not cont:
-    exit('Canceled')
+parser = argparse.ArgumentParser()
+parser.add_option('--run-from-script', action='store_true', help='Run non-interactively; to be called from scripts')
+args = parser.parse_args()
+
+if not args.run_from_script:
+    try:
+        print(__doc__, 'Continue? [Y/n]:', sep='\n', end=' ')
+        ans = input()
+        cont = True
+        if re.search(r'^[nN]', ans.strip()):
+            cont = False
+    except (KeyboardInterrupt, EOFError):
+        exit('Canceled')
+    if not cont:
+        exit('Canceled')
 
 this_dir = os.path.dirname(os.path.realpath(__file__))
 
 patterns_to_delete = (re.compile(r'__pycache__'),
                       re.compile(r'pyc$'),
-                      re.compile(r'[~]$'))
+                      re.compile(r'[~]$'),
+                      re.compile(r'/builddir'))
 
 for pat in patterns_to_delete:
     for dirpath, dirnames, filenames in os.walk(this_dir, topdown=False):
@@ -57,16 +64,17 @@ for pat in patterns_to_delete:
                 os.rmdir(dirpath)
         #print(repr((dirpath, dirnames, filenames)))
 
-try:
-    print('Deleted cruft.\n\nDelete Sleep Inhibitor configuration? [y/N]:', end=' ')
-    ans = input()
-    cont = False
-    if re.search(r'^[yY]', ans):
-        cont = True
-except (KeyboardInterrupt, EOFError):
-    exit('Canceled')
-if not cont:
-    exit(0)
-cmd = ['{}/sleep_inhibit.py'.format(this_dir), '--delete']
-#print(cmd)
-subprocess.call(cmd)
+if not args.run_from_script:
+    try:
+        print('Deleted cruft.\n\nDelete Sleep Inhibitor configuration? [y/N]:', end=' ')
+        ans = input()
+        cont = False
+        if re.search(r'^[yY]', ans):
+            cont = True
+    except (KeyboardInterrupt, EOFError):
+        exit('Canceled')
+    if not cont:
+        exit(0)
+    cmd = ['{}/sleep_inhibit.py'.format(this_dir), '--delete']
+    #print(cmd)
+    subprocess.call(cmd)

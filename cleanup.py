@@ -28,7 +28,7 @@ import re
 import subprocess
 
 parser = argparse.ArgumentParser()
-parser.add_option('--run-from-script', action='store_true', help='Run non-interactively; to be called from scripts')
+parser.add_argument('--run-from-script', action='store_true', help='Run non-interactively; to be called from scripts')
 args = parser.parse_args()
 
 if not args.run_from_script:
@@ -52,15 +52,17 @@ patterns_to_delete = (re.compile(r'__pycache__'),
 
 for pat in patterns_to_delete:
     for dirpath, dirnames, filenames in os.walk(this_dir, topdown=False):
-        if '.git' in dirpath or 'sleepinhibit/img' in dirpath:
+        if '.git' in dirpath:# or 'sleepinhibit/img' in dirpath:
             continue
         for name in filenames:
             name = os.path.join(dirpath, name)
             if re.search(pat, name):
                 if os.path.isfile(name):
+                    print('Deleting file', name)
                     os.unlink(name)
         if re.search(pat, dirpath):
             if os.path.isdir(dirpath):
+                print('Deleting dir ', dirpath)
                 os.rmdir(dirpath)
         #print(repr((dirpath, dirnames, filenames)))
 

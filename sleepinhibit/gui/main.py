@@ -128,7 +128,7 @@ class SleepInhibitGUI(GObject):
         #about.set_website_label("LearnGTK Website")
         about.set_authors(credits['authors'])
         about.set_artists(credits['artists'])
-        about.set_copyright(credits['copyright'])
+        about.set_copyright('\n'.join(['© {} by {}'.format(i['years'], i['name']) for i in credits['copyright']]))
         about.set_license_type(Gtk.License.GPL_3_0)
 
         about.run()

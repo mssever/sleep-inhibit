@@ -17,4 +17,4 @@ else:
     def main(*args):
         exit('You must specify a package type.')
 
-main()
+main(srcdir)

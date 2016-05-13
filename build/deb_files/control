@@ -1,0 +1,15 @@
+Source: sleep-inhibit
+Section: unknown
+Priority: optional
+Maintainer: Scott Severance <scott@scottseverance.us>
+Build-Depends: debhelper (>=9)
+Standards-Version: 3.9.6
+Homepage: <insert the upstream URL, if relevant>
+#Vcs-Git: git://anonscm.debian.org/collab-maint/sleep-inhibit.git
+#Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/sleep-inhibit.git
+
+Package: sleep-inhibit
+Architecture: all
+Depends: ${misc:Depends}
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>

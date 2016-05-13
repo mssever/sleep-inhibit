@@ -26,9 +26,6 @@ import os
 from sleepinhibit.settings import get_settings
 from sleepinhibit.startup import main
 
-if __name__ != '__main__':
-    raise ImportError('This is the main module. It is not meant to be imported.')
-
 config = get_settings()
 config.start_file = os.path.realpath(__file__)
 config.program_dir = '{}/sleepinhibit'.format(os.path.dirname(os.path.realpath(__file__)))

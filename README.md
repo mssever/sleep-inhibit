@@ -4,6 +4,15 @@ creating an icon and a menu where you can choose to inhibit sleep or not. There
 are preferences available to autostart, to start in inhibit mode, and to control
 what Sleep Inhibit does when you're running on battery.
 
+# Getting Sleep Inhibitor
+There are several options for getting Sleep Inhibitor:
+
+1. You can use `git` to get the most recent stable version. Run this command:
+
+        git clone 'https://github.com/mssever/sleep-inhibit.git'
+
+2. You can [download the most recent release](https://github.com/mssever/sleep-inhibit/releases). Downloading the source `tar.gz` is fine. The source `zip` may have incorrect permissions. Just extract the source and you're good to go.
+
 # Usage
 No installation is needed. Simply launch `sleep_inhibit` in the base directory.
 You can use the preferences dialog to configure autostart if you want.

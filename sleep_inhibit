@@ -33,4 +33,5 @@ config.desktop_filename = '{}/.config/autostart/sleep_inhibit.desktop'.format(os
 config.version = '1.0.0-beta'
 config.inhibitor_interval = 3 # Value is in minutes
 
-exit(main())
+if __name__ == '__main__':
+    exit(main())

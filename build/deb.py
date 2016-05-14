@@ -44,9 +44,6 @@ def main(basedir):
     for index, dir_ in enumerate(('usr/lib/python3/dist-packages/sleep-inhibit', 'usr/share/applications', 'usr/bin')):
         dir_ = join(installdir, dir_)
         os.makedirs(join(installdir, dir_))
-        while not os.path.isdir(dir_):
-            print('Waiting for {} to become available...'.format(dir_))
-            time.sleep(5)
         if index == 0:
             print(cmd_output(['cp', '-r'] + srcfiles + [dir_]))
         elif index == 1:

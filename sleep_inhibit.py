@@ -30,7 +30,7 @@ config = get_settings()
 config.start_file = os.path.realpath(__file__)
 config.program_dir = '{}/sleepinhibit'.format(os.path.dirname(os.path.realpath(__file__)))
 config.desktop_filename = '{}/.config/autostart/sleep_inhibit.desktop'.format(os.environ['HOME'])
-config.version = '1.0.0-beta'
+config.version = '1.0.0~beta'
 config.inhibitor_interval = 3 # Value is in minutes
 
 if __name__ == '__main__':

@@ -10,7 +10,7 @@ Vcs-Git: https://github.com/mssever/sleep-inhibit.git
 
 Package: sleep-inhibit
 Architecture: all
-Depends: ${misc:Depends}, xdotool, xprintidle, python3
+Depends: ${{misc:Depends}}, xdotool, xprintidle, python3, python3-gi
 Recommends: acpi
 Description: Prevent your computer from sleeping
  A small indicator to prevent your Linux computer from sleeping. It works by

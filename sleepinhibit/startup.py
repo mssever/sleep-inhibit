@@ -84,7 +84,7 @@ def main():
             try:
                 os.unlink(file_)
             except FileNotFoundError:
-                pass
+                print('{}: File not found'.format(file_))
         return 0
     elif args.mode == 'indicator':
         if args.battery is not None:

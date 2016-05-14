@@ -17,6 +17,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+'''
+This is the main module for the inhibitor process, the process which actually
+prevents sleep.
+'''
+
 import subprocess
 import time
 from sleepinhibit import battery as battery_module
@@ -24,6 +29,13 @@ from sleepinhibit.util import cmd_output
 from sleepinhibit.settings import get_settings
 
 def run(battery=False, percent=None):
+    '''The main loop for sleep inhibition.
+
+    Args:
+    battery: If True, don't inhibit sleep while running on battery
+    percent: If battery == True and battery percent >= this value, go ahead and
+             inhibit sleep as if running on AC.
+    '''
     config = get_settings()
     minutes = config.inhibitor_interval # number of minutes of inactivity between activating keyboard
     milliseconds = minutes * 60 * 1000

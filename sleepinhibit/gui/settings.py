@@ -163,12 +163,14 @@ consideration, please install the <tt>acpi</tt> command and restart Sleep Inhibi
             battery_switch.props.sensitive = False
             battery_label.props.sensitive = False
 
-    def on_start_inhibited_toggle(self, switch, gparm):
+    @staticmethod
+    def on_start_inhibited_toggle(switch, *args): # *args: was gparm
         config = get_settings()
         config.start_inhibited = switch.props.active
         config.save_settings()
 
-    def on_autostart_toggle(self, switch, gparm):
+    @staticmethod
+    def on_autostart_toggle(switch, *args): # *args: was gparm
         config = get_settings()
         filename = config.desktop_filename
         if switch.props.active:
@@ -184,7 +186,7 @@ consideration, please install the <tt>acpi</tt> command and restart Sleep Inhibi
         config.autostart = switch.props.active
         config.save_settings()
 
-    def on_battery_toggle(self, switch, gparm):
+    def on_battery_toggle(self, switch, *args): # *args: was gparm
         config = get_settings()
         config.battery = not switch.props.active
         config.save_settings()
@@ -200,24 +202,24 @@ consideration, please install the <tt>acpi</tt> command and restart Sleep Inhibi
             self.pct_button.props.sensitive = False
             self.pct_label.props.sensitive = False
 
-    def on_close(self, button):
+    def on_close(self, *args): # *args: was button
         self.hide()
 
-    def on_icon_light_toggled(self, button, gparm):
+    def on_icon_light_toggled(self, button, *args): # *args: was gparm
         with self.icon_light.freeze_notify():
             with self.icon_dark.freeze_notify():
                 if self.icon_light.props.active:
                     self.icon_dark.props.active = False
                     self.set_icon_theme('light')
 
-    def on_icon_dark_toggled(self, button, gparm):
+    def on_icon_dark_toggled(self, *args): # *args: was button, gparm
         with self.icon_light.freeze_notify():
             with self.icon_dark.freeze_notify():
                 if self.icon_dark.props.active:
                     self.icon_light.props.active = False
                     self.set_icon_theme('dark')
     
-    def on_pct_enable_toggle(self, switch, gparm):
+    def on_pct_enable_toggle(self, *args): # *args: was button, gparm
         config = get_settings()
         config.battery_percent_enabled = switch.props.active
         config.save_settings()

@@ -95,8 +95,8 @@ class SleepInhibitGUI(GObject):
             self.kill_inhibit_proc()
             self.set_icon_disabled(menuitem)
     
-    def on_settings(self, menuitem=None):
-        def destroy(window, event):
+    def on_settings(self, *args): # *args: was menuitem
+        def destroy(window, *args): # *args: was event
             self.settings_dialog = None
             window.destroy()
         if self.settings_dialog:
@@ -109,14 +109,15 @@ class SleepInhibitGUI(GObject):
             dialog.show_all()
             dialog.present()
 
-    def on_quit(self, menuitem=None, **kwargs):
+    def on_quit(self, *args, **kwargs): # *args: was menuitem
         if 'signal' in kwargs.keys():
             print('\nExiting...')
         if self.inhibit_proc:
             self.kill_inhibit_proc()
         exit(0)
 
-    def on_about(self, menuitem):
+    @staticmethod
+    def on_about(*args): # *args: was menuitem
         config = get_settings()
         with open(config.program_dir + '/data/credits.json') as f:
             credits = json.loads(f.read())

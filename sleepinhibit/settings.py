@@ -17,10 +17,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+'''The settings module.
+
+The only public object is the get_settings() function. Everything else should be
+deemed private.
+'''
+
 import json
 import os
 from sleepinhibit.collection import Collection
 
+__all__ = ['get_settings']
 _settings_obj = None
 
 def get_settings():
@@ -37,6 +44,13 @@ class _SettingsObject(Collection):
     '''The class which stores settings. Don't create an instance directly.
     instead, use get_settings().'''
     def __init__(self):
+        ''' Initialize.
+        In addition to regular init, this method also initializes certain
+        settings to hard-coded values, which may be overwritten by
+        init_settings(), and looks for a config file at a hard-coded location.
+
+        TODO: Factor these hard-coded items out to a file under sleepinhibit/data.
+        '''
         Collection.__init__(self)
         self.config_file = '{}/.config/sleep_inhibit.json'.format(os.environ['HOME'])
         # self.managed_settings holds the settings which should be saved to disk,
@@ -51,9 +65,10 @@ class _SettingsObject(Collection):
                 f.write('//\n//\n{}\n')
         for key, value in self.managed_settings.items():
             Collection.__setattr__(self, key, value)
-        self.init_settings()
+        self._init_settings()
 
-    def init_settings(self):
+    def _init_settings(self):
+        '''Set settings from the config file.''''
         with open(self.config_file) as f:
             lines = f.readlines()
             data = json.loads('\n'.join(lines[2:]))
@@ -61,6 +76,10 @@ class _SettingsObject(Collection):
             self.__setattr__(key, value)
 
     def save_settings(self):
+        '''Save managed settings to the configuration file.
+
+        Call this after you update a managed setting. Calling it after setting a
+        non-managed setting just wastes processor cycles.'''
         output = {}
         warning = "// Sleep Inhibit Settings\n// Don't edit this file manually while the program is running lest your changes be overwritten."
         for setting in self.managed_settings.keys():

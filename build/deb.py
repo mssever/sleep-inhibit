@@ -24,7 +24,7 @@ def main(basedir):
     srcfiles = [join(basedir, 'LICENSE'), join(basedir, 'README.md'),
                 join(basedir, 'sleepinhibit'), join(basedir, 'sleep_inhibit.py')]
     debiandir = join(srcdir, 'debian')
-    installdir = join(debiandir, 'install')
+    installdir = join(debiandir, 'tmp')
     with open(join(basedir, 'sleepinhibit', 'data', 'credits.json')) as f:
         credits = json.loads(f.read())
 

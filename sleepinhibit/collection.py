@@ -34,12 +34,14 @@ class Collection(object):
         foo.add_property('other', 6) # alternate way to add a new item
     '''
     def __init__(self, **kwargs):
+        '''Initialize. Any keyword arguments given are automatically added.'''
         object.__setattr__(self, '_contained_items', set())
         for k, v in kwargs.items():
             self.add_property(k, v)
         #self.__dict__.update(kwargs)
 
     def __setattr__(self, name, value):
+        '''Not to be called directly except perhaps in subclasses.'''
         if name in self._contained_items:
             object.__setattr__(self, name, value)
         else:
@@ -66,6 +68,7 @@ class Collection(object):
                 )
 
     def __repr__(self):
+        '''Return a human-readable listing of this instance's contents.'''
         return '{cls}({args})'.format(
             cls=type(self).__name__,
             args=', '.join(sorted(

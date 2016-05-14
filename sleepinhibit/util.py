@@ -17,6 +17,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+'''
+This module contains various utility functions.
+'''
+
 import subprocess
 from gi.repository import Gio, GdkPixbuf
 from sleepinhibit.settings import get_settings
@@ -26,7 +30,9 @@ def cmd_output(*args, **kwargs):
     return subprocess.check_output(*args, **kwargs).decode('utf-8').strip()
 
 def app_icon(which, return_pixbuf=True, theme=None):
-    '''if return_pixbuf is False, returns the path as a str'''
+    ''' REturn an icon, where which is specific to this app.
+    The icon may be returned as a Pixbuf or as a string of its filename. Theme,
+    if given, should be 'light' or 'dark'.'''
     if 'indicator' in which and not theme:
         raise ValueError('Indicator icons must have a theme specified')
     icon_dir = '{}/img/{{}}'.format(get_settings().program_dir)

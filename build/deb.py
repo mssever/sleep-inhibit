@@ -2,6 +2,7 @@
 if __name__ == '__main__':
     exit('This script is intended to be imported from ../build_package.py')
 
+import compileall
 import json
 import os
 import time
@@ -46,6 +47,7 @@ def main(basedir):
         os.makedirs(join(installdir, dir_))
         if index == 0:
             print(cmd_output(['cp', '-r'] + srcfiles + [dir_]))
+            compileall.compile_dir(dir_, workers=3)
         elif index == 1:
             path = 'usr/lib/python3/dist-packages/sleep-inhibit'
             with open(join(basedir, 'sleepinhibit/data/sleep-inhibit.desktop.template')) as src:

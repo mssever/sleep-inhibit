@@ -58,6 +58,7 @@ class SleepInhibitGUI(GObject):
         menu.append(menu_item)
         menu_item.connect("activate", self.on_toggle)
         menu_item.show()
+        self.inhibit_menuitem = menu_item
 
         menu_item = Gtk.SeparatorMenuItem()
         menu.append(menu_item)
@@ -82,6 +83,8 @@ class SleepInhibitGUI(GObject):
 
     def on_toggle(self, menuitem=None):
         config = get_settings()
+        if not menuitem:
+            menuitem = self.inhibit_menuitem
         self.inhibited = not self.inhibited
         if self.inhibited:
             self.set_icon_enabled(menuitem)
@@ -138,13 +141,11 @@ class SleepInhibitGUI(GObject):
 
     def set_icon_disabled(self, menuitem):
         self.AppInd.set_icon(self.icon_off)
-        if menuitem:
-            menuitem.set_label('Inhibit Sleep')
+        menuitem.set_label('Inhibit Sleep')
 
     def set_icon_enabled(self, menuitem):
         self.AppInd.set_icon(self.icon_on)
-        if menuitem:
-            menuitem.set_label('Enable Sleep')
+        menuitem.set_label('Enable Sleep')
 
     def kill_inhibit_proc(self):
         self.inhibit_proc.terminate()

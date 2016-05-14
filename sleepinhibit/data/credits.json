@@ -7,5 +7,15 @@
         "Basic Icon: <a href=\"http://www.flaticon.com/authors/sean-mccormick\">Sean McCormick</a>, licensed as <a href=\"http://creativecommons.org/licenses/by/3.0/\">CC 3.0 BY</a>",
         "Icons modified by Scott Severance"],
     "copyright": [
-        {"years": "2016", "name": "Scott Severance"}]
+        {
+            "years": "2016",
+            "name": "Scott Severance",
+            "email": "scott@scottseverance.us"
+        }],
+    "deb_copyright": [
+        {
+            "years": "2016",
+            "name": "Scott Severance",
+            "email": "scott@scottseverance.us"
+        }]
 }

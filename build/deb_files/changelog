@@ -1,0 +1,5 @@
+{pkgname} ({version}) unstable; urgency=medium
+
+  * {logmsg}
+
+ -- {name} <{email}>  {date}

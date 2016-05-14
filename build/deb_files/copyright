@@ -1,14 +1,13 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: sleep-inhibit
-Source: <url://example.com>
+Source: <https://github.com/mssever/sleep-inhibit>
 
 Files: *
-Copyright: <years> <put author's name and email here>
-           <years> <likewise for another author>
+Copyright: {source_copyright}
 License: GPL-3.0+
 
 Files: debian/*
-Copyright: 2016 Scott Severance <scott@scottseverance.us>
+Copyright: {deb_copyright_year} {deb_name} <{deb_email}>
 License: GPL-3.0+
 
 License: GPL-3.0+

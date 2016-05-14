@@ -1,15 +1,19 @@
 Source: sleep-inhibit
 Section: unknown
 Priority: optional
-Maintainer: Scott Severance <scott@scottseverance.us>
+Maintainer: {name} <{email}>
 Build-Depends: debhelper (>=9)
 Standards-Version: 3.9.6
-Homepage: <insert the upstream URL, if relevant>
-#Vcs-Git: git://anonscm.debian.org/collab-maint/sleep-inhibit.git
+Homepage: https://github.com/mssever/sleep-inhibit
+Vcs-Git: https://github.com/mssever/sleep-inhibit.git
 #Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/sleep-inhibit.git
 
 Package: sleep-inhibit
 Architecture: all
-Depends: ${misc:Depends}
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
+Depends: ${misc:Depends}, xdotool, xprintidle, python3
+Recommends: acpi
+Description: Prevent your computer from sleeping
+ A small indicator to prevent your Linux computer from sleeping. It works by
+ creating an icon and a menu where you can choose to inhibit sleep or not. There
+ are preferences available to autostart, to start in inhibit mode, and to
+ control what Sleep Inhibit does when you're running on battery.

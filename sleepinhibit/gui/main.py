@@ -116,7 +116,8 @@ class SleepInhibitGUI(GObject):
             self.kill_inhibit_proc()
         exit(0)
 
-    def on_about(self, *args): # *args: was menuitem
+    @staticmethod
+    def on_about(*args): # *args: was menuitem
         config = get_settings()
         with open(config.program_dir + '/data/credits.json') as f:
             credits = json.loads(f.read())

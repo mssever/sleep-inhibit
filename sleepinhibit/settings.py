@@ -68,7 +68,7 @@ class _SettingsObject(Collection):
         self._init_settings()
 
     def _init_settings(self):
-        '''Set settings from the config file.'''
+        '''Initialize settings from the config file.'''
         with open(self.config_file) as f:
             lines = f.readlines()
             data = json.loads('\n'.join(lines[2:]))

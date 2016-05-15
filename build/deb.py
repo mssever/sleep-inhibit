@@ -24,7 +24,7 @@ def main(basedir):
     srcfiles = [join(basedir, 'LICENSE'), join(basedir, 'README.md'),
                 join(basedir, 'sleepinhibit'), join(basedir, 'sleep_inhibit.py')]
     debiandir = join(srcdir, 'debian')
-    installdir = join(debiandir, 'tmp')
+    installdir = join(debiandir, 'install')
     with open(join(basedir, 'sleepinhibit', 'data', 'credits.json')) as f:
         credits = json.loads(f.read())
 
@@ -42,14 +42,14 @@ def main(basedir):
             os.unlink(join(debiandir, file_))
 
     # Install app files into their proper locations
-    for index, dir_ in enumerate(('usr/lib/python3/dist-packages/sleep-inhibit', 'usr/share/applications', 'usr/bin')):
+    for index, dir_ in enumerate(('usr/share/sleep-inhibit', 'usr/share/applications', 'usr/bin')):#'usr/lib/python3/dist-packages/sleep-inhibit'
         dir_ = join(installdir, dir_)
         os.makedirs(join(installdir, dir_))
         if index == 0:
             print(cmd_output(['cp', '-r'] + srcfiles + [dir_]))
             compileall.compile_dir(dir_, workers=3)
         elif index == 1:
-            path = 'usr/lib/python3/dist-packages/sleep-inhibit'
+            path = 'usr/share/sleep-inhibit'
             with open(join(basedir, 'sleepinhibit/data/sleep-inhibit.desktop.template')) as src:
                 with open(join(installdir, dir_, 'sleep-inhibit.desktop'), 'w') as dest:
                     dest.write(src.read().format(program_path=join(path, 'sleep_inhibit.py'),
@@ -59,6 +59,7 @@ def main(basedir):
             print(cmd_output(['cp', '-r', join(staticdir, 'sleep-inhibit'), join(installdir, 'usr/bin')]))
         else:
             raise RuntimeError('Iterating over the wrong number of directories')
+    make_install_file(installdir, debiandir)
 
     # Set up files in debian/
     make_changelog(join(staticdir, 'changelog'), join(debiandir, 'changelog'), credits)
@@ -69,6 +70,9 @@ def main(basedir):
 
     # Run debuild
     print(cmd_output(['debuild']))
+    # Errors:
+    # E: sleep-inhibit: section-is-dh_make-template
+    # W: sleep-inhibit: empty-binary-package
 
 def make_changelog(src_path, dst_path, credits):
     config = get_settings()
@@ -98,3 +102,15 @@ def make_control(src_path, dst_path, credits):
         with open(dst_path, 'w') as dst:
             dst.write(src.read().format(name=credits['deb_copyright'][0]['name'],
                                         email=credits['deb_copyright'][0]['email']))
+
+def make_install_file(src, debdir):
+    data = []
+    src_discard_len = len(src)+1
+    install_from_discard_len = len(os.path.split(os.path.split(src)[0])[0]) + 1
+    for dirpath, dirnames, filenames in os.walk(src):
+        for name in filenames:
+            data.append((join(src, dirpath, name)[install_from_discard_len:], join(dirpath, name)[src_discard_len:]))
+    #print(repr({'src': src, 'src_discard_len':src_discard_len, 'parent':parent, 'base':base, 'data':data}))
+    with open(join(debdir, 'sleep-inhibit.install'), 'w') as f:
+        f.write('\n'.join(['{}\t{}'.format(i[0], i[1]) for i in data]))
+    #exit(0)

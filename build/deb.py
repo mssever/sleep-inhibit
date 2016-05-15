@@ -53,7 +53,7 @@ def main(basedir):
             with open(join(basedir, 'sleepinhibit/data/sleep-inhibit.desktop.template')) as src:
                 with open(join(installdir, dir_, 'sleep-inhibit.desktop'), 'w') as dest:
                     dest.write(src.read().format(program_path=join(path, 'sleep_inhibit.py'),
-                                                 icon_path=join(path, 'sleepinhibit/img/window_icon.png')))
+                                                 icon_path=join(path, 'sleepinhibit/img')))
             os.chmod(join(installdir, dir_, 'sleep-inhibit.desktop'), 0o755)
         elif index == 2:
             print(cmd_output(['cp', '-r', join(staticdir, 'sleep-inhibit'), join(installdir, 'usr/bin')]))
@@ -109,7 +109,8 @@ def make_install_file(src, debdir):
     install_from_discard_len = len(os.path.split(os.path.split(src)[0])[0]) + 1
     for dirpath, dirnames, filenames in os.walk(src):
         for name in filenames:
-            data.append((join(src, dirpath, name)[install_from_discard_len:], join(dirpath, name)[src_discard_len:]))
+            data.append((join(src, dirpath, name)[install_from_discard_len:],
+                         os.path.dirname(join(dirpath, name)[src_discard_len:])))
     #print(repr({'src': src, 'src_discard_len':src_discard_len, 'parent':parent, 'base':base, 'data':data}))
     with open(join(debdir, 'sleep-inhibit.install'), 'w') as f:
         f.write('\n'.join(['{}\t{}'.format(i[0], i[1]) for i in data]))

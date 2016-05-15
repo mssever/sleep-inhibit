@@ -14,7 +14,7 @@ There are several options for getting Sleep Inhibitor:
 2. You can [download the most recent release](https://github.com/mssever/sleep-inhibit/releases). Downloading the source `tar.gz` is fine. The source `zip` may have incorrect permissions. Just extract the source and you're good to go.
 
 # Usage
-No installation is needed. Simply launch `sleep_inhibit` in the base directory.
+No installation is needed. Simply launch `sleep_inhibit.py` in the base directory.
 You can use the preferences dialog to configure autostart if you want.
 
 No installation is necessary. Just:

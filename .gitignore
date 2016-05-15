@@ -64,6 +64,9 @@ target/
 # Generic backups
 *~
 
+# Editor stuff
+*.geany
+
 # Misc
 iconlist.py
 tmp/

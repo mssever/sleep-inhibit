@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+'''Boots the app'''
+
 from argparse import ArgumentParser
 import subprocess
 import os
@@ -27,6 +29,7 @@ from sleepinhibit import util, battery, settings
 import sleepinhibit.gui.main
 
 def dependencies_are_satisfied():
+    '''Return True if all dependencies are satisfied.'''
     try:
         util.cmd_output(['xprintidle'])
         subprocess.call('xdotool', stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -35,7 +38,10 @@ def dependencies_are_satisfied():
     return True
 
 def parse_args():
+    '''Handle command-line arguments.'''
     def percentage(n):
+        '''Determine whether n represents a valid percentage (% sign optional).
+        If so, returns it as an int. Otherwise, raises TypeError.'''
         if n.strip()[-1] == '%':
             n = n[:-1]
         n = int(n.strip())
@@ -71,6 +77,7 @@ def parse_args():
     return parser.parse_args()
 
 def main():
+    '''Dispatches control to the appropriate parts of the app'''
     args = parse_args()
     config = settings.get_settings()
     if not dependencies_are_satisfied():

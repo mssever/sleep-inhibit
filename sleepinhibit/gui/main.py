@@ -28,8 +28,11 @@ from sleepinhibit.settings import get_settings
 from sleepinhibit.gui.settings import SettingsDialog
 
 class SleepInhibitGUI(GObject):
+    '''Class for the indicator and other GUI elements. All of the GUI-related
+    code lives here, except for the preferences dialog.'''
 
     def __init__(self):
+        '''Initializes and adds the indicator'''
         GObject.__init__(self)
         config = get_settings()
         self.inhibited = False
@@ -82,6 +85,10 @@ class SleepInhibitGUI(GObject):
         indicator.set_menu(menu)
 
     def on_toggle(self, menuitem=None):
+        '''Called whenever the Inhibit Sleep/Enable Sleep menuitem is activated.
+        To reset the inhibitor whenever configuration changes are made, call
+        restart_inhibitor() instead of this method.
+        '''
         config = get_settings()
         if not menuitem:
             menuitem = self.inhibit_menuitem
@@ -99,7 +106,10 @@ class SleepInhibitGUI(GObject):
             self.set_icon_disabled(menuitem)
     
     def on_settings(self, *args): # *args: was menuitem
+        '''Called when the user selects Preferences from the indicator menu.'''
+        
         def destroy(window, *args): # *args: was event
+            '''Called when the Preferences window is closed.'''
             self.settings_dialog = None
             window.destroy()
         if self.settings_dialog:
@@ -113,6 +123,7 @@ class SleepInhibitGUI(GObject):
             dialog.present()
 
     def on_quit(self, *args, **kwargs): # *args: was menuitem
+        '''Causes the program to exit.'''
         if 'signal' in kwargs.keys():
             print('\nExiting...')
         if self.inhibit_proc:
@@ -121,6 +132,7 @@ class SleepInhibitGUI(GObject):
 
     @staticmethod
     def on_about(*args): # *args: was menuitem
+        '''Builds and shows the about dialog.'''
         config = get_settings()
         with open(config.program_dir + '/data/credits.json') as f:
             credits = json.loads(f.read())
@@ -140,20 +152,25 @@ class SleepInhibitGUI(GObject):
 
 
     def set_icon_disabled(self, menuitem):
+        '''Switches the indicator icon to show that sleep is possible.'''
         self.AppInd.set_icon(self.icon_off)
         menuitem.set_label('Inhibit Sleep')
 
     def set_icon_enabled(self, menuitem):
+        '''Switches the indicator icon to show that sleep is inhibited.'''
         self.AppInd.set_icon(self.icon_on)
         menuitem.set_label('Enable Sleep')
 
     def kill_inhibit_proc(self):
+        '''Called to stop inhibiting sleep'''
         self.inhibit_proc.terminate()
         self.inhibit_proc.wait()
         self.inhibit_proc = None
 
     def restart_inhibitor(self):
+        '''Should also be called whenever configuration changes are made which
+        affect how the inhibitor works. (If sleep was not inhibited when the
+        changes are made, then there is no need to call this method.'''
         if self.inhibit_proc:
             self.on_toggle()
-            #time.sleep(1)
             self.on_toggle()

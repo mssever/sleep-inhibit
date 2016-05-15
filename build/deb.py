@@ -62,9 +62,12 @@ def main(basedir):
     make_install_file(installdir, debiandir)
 
     # Set up files in debian/
-    make_changelog(join(staticdir, 'changelog'), join(debiandir, 'changelog'), credits)
-    make_copyright(join(staticdir, 'copyright'), join(debiandir, 'copyright'), credits)
-    make_control(join(staticdir, 'control'), join(debiandir, 'control'), credits)
+    make_changelog(join(staticdir, 'changelog'),
+                   join(debiandir, 'changelog'), credits)
+    make_copyright(join(staticdir, 'copyright'),
+                   join(debiandir, 'copyright'), credits)
+    make_control(join(staticdir, 'control'),
+                 join(debiandir, 'control'), credits)
     print(cmd_output(['cp', '-r', join(staticdir, 'rules'), debiandir]))
     os.chmod(join(debiandir, 'rules'), 0o755)
 
@@ -111,7 +114,5 @@ def make_install_file(src, debdir):
         for name in filenames:
             data.append((join(src, dirpath, name)[install_from_discard_len:],
                          os.path.dirname(join(dirpath, name)[src_discard_len:])))
-    #print(repr({'src': src, 'src_discard_len':src_discard_len, 'parent':parent, 'base':base, 'data':data}))
     with open(join(debdir, 'sleep-inhibit.install'), 'w') as f:
         f.write('\n'.join(['{}\t{}'.format(i[0], i[1]) for i in data]))
-    #exit(0)

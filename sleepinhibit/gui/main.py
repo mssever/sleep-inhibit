@@ -57,11 +57,10 @@ class SleepInhibitGUI(GObject):
     def _build_indicator_menu(self, indicator):
         menu = Gtk.Menu()
 
-        menu_item = Gtk.MenuItem("Inhibit Sleep")
-        menu.append(menu_item)
-        menu_item.connect("activate", self.on_toggle)
-        menu_item.show()
-        self.inhibit_menuitem = menu_item
+        self.inhibit_menu_item = Gtk.MenuItem("Inhibit Sleep")
+        menu.append(self.inhibit_menu_item)
+        self.inhibit_menu_item.connect("activate", self.on_toggle)
+        self.inhibit_menu_item.show()
 
         menu_item = Gtk.SeparatorMenuItem()
         menu.append(menu_item)
@@ -91,7 +90,7 @@ class SleepInhibitGUI(GObject):
         '''
         config = get_settings()
         if not menuitem:
-            menuitem = self.inhibit_menuitem
+            menuitem = self.inhibit_menu_item
         self.inhibited = not self.inhibited
         if self.inhibited:
             self.set_icon_enabled(menuitem)

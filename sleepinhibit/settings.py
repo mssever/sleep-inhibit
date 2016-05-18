@@ -19,7 +19,7 @@
 
 '''The settings module.
 
-The only public object is the get_settings() function. Everything else should be
+The only public object is the get_config() function. Everything else should be
 deemed private.
 '''
 
@@ -27,10 +27,10 @@ import json
 import os
 from sleepinhibit.collection import Collection
 
-__all__ = ['get_settings']
+__all__ = ['get_config']
 _settings_obj = None
 
-def get_settings():
+def get_config():
     '''Creates, if necessary, and returns the settings object, ensuring that only one such object exists.'''
     global _settings_obj
     if _settings_obj:
@@ -42,7 +42,7 @@ def get_settings():
 
 class _SettingsObject(Collection):
     '''The class which stores settings. Don't create an instance directly.
-    instead, use get_settings().'''
+    instead, use get_config().'''
 
     def __init__(self):
         ''' Initialize.

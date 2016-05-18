@@ -49,7 +49,7 @@ def parse_args():
             return n
         else:
             raise TypeError('Invalid Percentage!')
-    
+
     parser = ArgumentParser(description='''Indicator to prevent
         computer from sleeping. It depends on the commands xprintidle and
         xdotool being properly installed on your system. If they aren't
@@ -79,14 +79,14 @@ def parse_args():
 def main():
     '''Dispatches control to the appropriate parts of the app'''
     args = parse_args()
-    config = settings.get_settings()
+    config = settings.get_config()
     if not dependencies_are_satisfied():
         return 'This program depends on xprintidle and xdotool being installed.'
     #if args.battery and not battery.acpi_available():
     #    return '--battery is only available if you have the acpi command on your system.'
     config.acpi_available = battery.acpi_available()
     if args.delete:
-        config = settings.get_settings()
+        config = settings.get_config()
         for file_ in (config.config_file, config.desktop_filename):
             try:
                 os.unlink(file_)

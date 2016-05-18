@@ -20,15 +20,15 @@
 import os
 from gi.repository import Gtk, Gdk, GLib, GdkPixbuf
 from sleepinhibit import util
-from sleepinhibit.settings import get_settings
+from sleepinhibit.settings import get_config
 
-class SettingsDialog(Gtk.Window):
+class PreferencesDialog(Gtk.Window):
     '''The code to power the preferences dialog'''
 
     def __init__(self, parent):
         '''Build the dialog'''
-        Gtk.Window.__init__(self, title='Sleep Inhibitor Settings')
-        config = get_settings()
+        Gtk.Window.__init__(self, title='Sleep Inhibitor Preferences')
+        config = get_config()
 
         self.parent = parent
         self.props.gravity = Gdk.Gravity.CENTER
@@ -168,14 +168,14 @@ consideration, please install the <tt>acpi</tt> command and restart Sleep Inhibi
     @staticmethod
     def on_start_inhibited_toggle(switch, *args): # *args: was gparm
         '''Callback for the start inhibited switch'''
-        config = get_settings()
+        config = get_config()
         config.start_inhibited = switch.props.active
         config.save_settings()
 
     @staticmethod
     def on_autostart_toggle(switch, *args): # *args: was gparm
         '''Callback for the autostart switch'''
-        config = get_settings()
+        config = get_config()
         filename = config.desktop_filename
         if switch.props.active:
             with open(os.path.join(config.program_dir, 'data/sleep-inhibit.desktop.template')) as f:
@@ -192,7 +192,7 @@ consideration, please install the <tt>acpi</tt> command and restart Sleep Inhibi
 
     def on_battery_toggle(self, switch, *args): # *args: was gparm
         '''Callback for the inhibit sleep while on battery switch'''
-        config = get_settings()
+        config = get_config()
         config.battery = not switch.props.active
         config.save_settings()
         self.parent.restart_inhibitor()
@@ -227,9 +227,9 @@ consideration, please install the <tt>acpi</tt> command and restart Sleep Inhibi
                     self.icon_light.props.active = False
                     self.set_icon_theme('dark')
 
-    def on_pct_enable_toggle(self, *args): # *args: was button, gparm
+    def on_pct_enable_toggle(self, switch, *args): # *args: was gparm
         '''Callback for the battery percentage switch'''
-        config = get_settings()
+        config = get_config()
         config.battery_percent_enabled = switch.props.active
         config.save_settings()
         self.parent.restart_inhibitor()
@@ -244,7 +244,7 @@ consideration, please install the <tt>acpi</tt> command and restart Sleep Inhibi
     def on_pct_change(self, button):
         '''Callback for the battery percentage spinner'''
         def change_timeout():#dialog, button):
-            config = get_settings()
+            config = get_config()
             new_value = button.get_value_as_int()
             old_value = self.old_pct_value
             if (new_value != old_value) and (config.batt_percent != new_value):
@@ -259,7 +259,7 @@ consideration, please install the <tt>acpi</tt> command and restart Sleep Inhibi
 
     def set_icon_theme(self, theme):
         '''Change the icon theme. Valid values are 'light' and 'dark'.'''
-        config = get_settings()
+        config = get_config()
         if theme == 'dark':
             config.icon_theme = 'dark'
             config.save_settings()

@@ -13,7 +13,7 @@ from sleepinhibit.util import cmd_output
 from sleepinhibit.settings import get_settings
 
 def main(basedir):
-
+    '''Do the build. `basedir` is the project root directory.'''
     # Common variables
     config = get_settings()
     if '-' in config.version:
@@ -78,6 +78,9 @@ def main(basedir):
     # W: sleep-inhibit: empty-binary-package
 
 def make_changelog(src_path, dst_path, credits):
+    '''Build the changelog, using the template at src_path and writing the
+    result to dst_path.
+    '''
     config = get_settings()
     with open(src_path) as src:
         with open(dst_path, 'w') as dst:
@@ -89,6 +92,9 @@ def make_changelog(src_path, dst_path, credits):
             dst.write(chlg)
 
 def make_copyright(src_path, dst_path, credits):
+    '''Build debian/copyright, using the template at src_path and writing the
+    result to dst_path.
+    '''
     with open(src_path) as src:
         with open(dst_path, 'w') as dst:
             cp = src.read()
@@ -101,12 +107,18 @@ def make_copyright(src_path, dst_path, credits):
             dst.write(cp)
 
 def make_control(src_path, dst_path, credits):
+    '''Build debian/control, using the template at src_path and writing the
+    result to dst_path.
+    '''
     with open(src_path) as src:
         with open(dst_path, 'w') as dst:
             dst.write(src.read().format(name=credits['deb_copyright'][0]['name'],
                                         email=credits['deb_copyright'][0]['email']))
 
 def make_install_file(src, debdir):
+    '''Build debian/install, using the source files at src and writing the
+    result to debdir/sleep-inhibit.install.
+    '''
     data = []
     src_discard_len = len(src)+1
     install_from_discard_len = len(os.path.split(os.path.split(src)[0])[0]) + 1

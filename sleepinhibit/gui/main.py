@@ -47,6 +47,7 @@ class SleepInhibitGUI(GObject):
         win.set_default_icon(util.app_icon('window_icon'))
 
     def _add_indicator(self):
+        '''Build the indicator'''
         self.icon_path = '{}/img'.format(get_settings().program_dir)
         self.AppInd = AppIndicator3.Indicator.new(self.appname,
                                                   self.icon_off,
@@ -55,6 +56,7 @@ class SleepInhibitGUI(GObject):
         self._build_indicator_menu(self.AppInd)
 
     def _build_indicator_menu(self, indicator):
+        '''Build the indicator menu'''
         menu = Gtk.Menu()
 
         self.inhibit_menu_item = Gtk.MenuItem("Inhibit Sleep")
@@ -103,10 +105,10 @@ class SleepInhibitGUI(GObject):
         else:
             self.kill_inhibit_proc()
             self.set_icon_disabled(menuitem)
-    
+
     def on_settings(self, *args): # *args: was menuitem
         '''Called when the user selects Preferences from the indicator menu.'''
-        
+
         def destroy(window, *args): # *args: was event
             '''Called when the Preferences window is closed.'''
             self.settings_dialog = None

@@ -15,6 +15,7 @@ if args.deb:
     from build.deb import main
 else:
     def main(*args):
+        '''Error exit'''
         exit('You must specify a package type.')
 
 main(srcdir)

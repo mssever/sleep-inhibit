@@ -26,7 +26,11 @@ from gi.repository import Gio, GdkPixbuf
 from sleepinhibit.settings import get_settings
 
 def cmd_output(*args, **kwargs):
-    '''Wrap subprocess.check_output to avoid having to do conversions, strip, etc.'''
+    '''Wrap subprocess.check_output to avoid having to do conversions, strip, etc.
+
+    If the command doesn't exist, raises `FileNotFoundError`. If the command exits
+    with a nonzero status, raises `subprocess.CalledProcessError` with the returned
+    result available on the exception object as `output`.'''
     return subprocess.check_output(*args, **kwargs).decode('utf-8').strip()
 
 def app_icon(which, return_pixbuf=True, theme=None):

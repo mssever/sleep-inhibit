@@ -35,6 +35,10 @@ def dependencies_are_satisfied():
         subprocess.call('xdotool', stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     except FileNotFoundError:
         return False
+    except subprocess.CalledProcessError as e:
+        print('Error: xprintidle said: "{}"'.format(e.stderr))
+        #print(repr(e))
+        return False
     return True
 
 def parse_args():
@@ -49,7 +53,7 @@ def parse_args():
             return n
         else:
             raise TypeError('Invalid Percentage!')
-    
+
     parser = ArgumentParser(description='''Indicator to prevent
         computer from sleeping. It depends on the commands xprintidle and
         xdotool being properly installed on your system. If they aren't
@@ -82,8 +86,6 @@ def main():
     config = settings.get_settings()
     if not dependencies_are_satisfied():
         return 'This program depends on xprintidle and xdotool being installed.'
-    #if args.battery and not battery.acpi_available():
-    #    return '--battery is only available if you have the acpi command on your system.'
     config.acpi_available = battery.acpi_available()
     if args.delete:
         config = settings.get_settings()

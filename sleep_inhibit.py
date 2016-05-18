@@ -23,10 +23,10 @@ gi.require_version('AppIndicator3', '0.1')
 gi.require_version('GdkPixbuf', '2.0')
 import os
 
-from sleepinhibit.settings import get_settings
+from sleepinhibit.settings import get_config
 from sleepinhibit.startup import main
 
-config = get_settings()
+config = get_config()
 config.start_file = os.path.realpath(__file__)
 config.program_dir = '{}/sleepinhibit'.format(os.path.dirname(os.path.realpath(__file__)))
 config.desktop_filename = '{}/.config/autostart/sleep_inhibit.desktop'.format(os.environ['HOME'])

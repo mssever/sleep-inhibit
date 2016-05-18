@@ -24,8 +24,8 @@ from gi.repository.GObject import GObject
 from gi.repository import Gtk, AppIndicator3, Gdk
 
 from sleepinhibit import util
-from sleepinhibit.settings import get_settings
-from sleepinhibit.gui.settings import SettingsDialog
+from sleepinhibit.settings import get_config
+from sleepinhibit.gui.prefs import PreferencesDialog
 
 class SleepInhibitGUI(GObject):
     '''Class for the indicator and other GUI elements. All of the GUI-related
@@ -34,21 +34,21 @@ class SleepInhibitGUI(GObject):
     def __init__(self):
         '''Initializes and adds the indicator'''
         GObject.__init__(self)
-        config = get_settings()
+        config = get_config()
         self.inhibited = False
         self.appname = 'sleep-inhibit'
         self.icon_on = util.app_icon('indicator_no_sleep', False, config.icon_theme)
         self.icon_off = util.app_icon('indicator_sleep', False, config.icon_theme)
         self.inhibit_proc = None
         SleepInhibitGUI.instance = self
-        self.settings_dialog = None
+        self.preferences_dialog = None
         self._add_indicator()
         win = Gtk.Window()
         win.set_default_icon(util.app_icon('window_icon'))
 
     def _add_indicator(self):
         '''Build the indicator'''
-        self.icon_path = '{}/img'.format(get_settings().program_dir)
+        self.icon_path = '{}/img'.format(get_config().program_dir)
         self.AppInd = AppIndicator3.Indicator.new(self.appname,
                                                   self.icon_off,
                                                   AppIndicator3.IndicatorCategory.APPLICATION_STATUS)
@@ -90,7 +90,7 @@ class SleepInhibitGUI(GObject):
         To reset the inhibitor whenever configuration changes are made, call
         restart_inhibitor() instead of this method.
         '''
-        config = get_settings()
+        config = get_config()
         if not menuitem:
             menuitem = self.inhibit_menu_item
         self.inhibited = not self.inhibited
@@ -111,13 +111,13 @@ class SleepInhibitGUI(GObject):
 
         def destroy(window, *args): # *args: was event
             '''Called when the Preferences window is closed.'''
-            self.settings_dialog = None
+            self.preferences_dialog = None
             window.destroy()
-        if self.settings_dialog:
-            self.settings_dialog.present()
+        if self.preferences_dialog:
+            self.preferences_dialog.present()
         else:
-            dialog = SettingsDialog(self)
-            self.settings_dialog = dialog
+            dialog = PreferencesDialog(self)
+            self.preferences_dialog = dialog
             dialog.set_type_hint(Gdk.WindowTypeHint.DIALOG)
             dialog.connect("delete-event", destroy)
             dialog.show_all()
@@ -134,7 +134,7 @@ class SleepInhibitGUI(GObject):
     @staticmethod
     def on_about(*args): # *args: was menuitem
         '''Builds and shows the about dialog.'''
-        config = get_settings()
+        config = get_config()
         with open(config.program_dir + '/data/credits.json') as f:
             credits = json.loads(f.read())
         about = Gtk.AboutDialog()

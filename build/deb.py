@@ -10,12 +10,12 @@ from os.path import join
 from email.utils import formatdate
 
 from sleepinhibit.util import cmd_output
-from sleepinhibit.settings import get_settings
+from sleepinhibit.settings import get_config
 
 def main(basedir):
     '''Do the build. `basedir` is the project root directory.'''
     # Common variables
-    config = get_settings()
+    config = get_config()
     if '-' in config.version:
         exit('The version number {} is incompatible with .deb packaging for an upstream. Please remove all "-" characters from the version string.'.format(config.version))
     builddir = join(basedir, 'builddir')
@@ -81,7 +81,7 @@ def make_changelog(src_path, dst_path, credits):
     '''Build the changelog, using the template at src_path and writing the
     result to dst_path.
     '''
-    config = get_settings()
+    config = get_config()
     with open(src_path) as src:
         with open(dst_path, 'w') as dst:
             chlg = src.read()

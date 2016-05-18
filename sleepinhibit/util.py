@@ -23,7 +23,7 @@ This module contains various utility functions.
 
 import subprocess
 from gi.repository import Gio, GdkPixbuf
-from sleepinhibit.settings import get_settings
+from sleepinhibit.settings import get_config
 
 def cmd_output(*args, **kwargs):
     '''Wrap subprocess.check_output to avoid having to do conversions, strip, etc.'''
@@ -35,7 +35,7 @@ def app_icon(which, return_pixbuf=True, theme=None):
     if given, should be 'light' or 'dark'.'''
     if 'indicator' in which and not theme:
         raise ValueError('Indicator icons must have a theme specified')
-    icon_dir = '{}/img/{{}}'.format(get_settings().program_dir)
+    icon_dir = '{}/img/{{}}'.format(get_config().program_dir)
     if theme:
         icon_dir = icon_dir.format('{}/{{}}'.format(theme))
     if which == 'window_icon':

@@ -26,7 +26,7 @@ import subprocess
 import time
 from sleepinhibit import battery as battery_module
 from sleepinhibit.util import cmd_output
-from sleepinhibit.settings import get_config
+from sleepinhibit.config import get_config
 
 def run(battery=False, percent=None):
     '''The main loop for sleep inhibition.

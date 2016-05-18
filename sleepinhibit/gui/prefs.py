@@ -20,7 +20,7 @@
 import os
 from gi.repository import Gtk, Gdk, GLib, GdkPixbuf
 from sleepinhibit import util
-from sleepinhibit.settings import get_config
+from sleepinhibit.config import get_config
 
 class PreferencesDialog(Gtk.Window):
     '''The code to power the preferences dialog'''

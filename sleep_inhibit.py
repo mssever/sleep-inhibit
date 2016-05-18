@@ -19,7 +19,10 @@
 
 import os
 if 'DISPLAY' not in os.environ or not os.environ['DISPLAY']:
-    exit('This program must be run from a graphical (X) session, and DISPLAY must be properly set.')
+    if __name__ == '__main__':
+        exit('This program must be run from a graphical (X) session, and DISPLAY must be properly set.')
+    else:
+        print("Many features require a graphical environment, which you don't seem to have. When importing this module, it's your responsibility to ensure that you don't call any such code.")
 
 import gi
 gi.require_version('Gtk', '3.0')

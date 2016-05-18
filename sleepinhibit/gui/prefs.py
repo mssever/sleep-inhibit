@@ -227,7 +227,7 @@ consideration, please install the <tt>acpi</tt> command and restart Sleep Inhibi
                     self.icon_light.props.active = False
                     self.set_icon_theme('dark')
 
-    def on_pct_enable_toggle(self, *args): # *args: was button, gparm
+    def on_pct_enable_toggle(self, switch, *args): # *args: was gparm
         '''Callback for the battery percentage switch'''
         config = get_config()
         config.battery_percent_enabled = switch.props.active

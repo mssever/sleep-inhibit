@@ -154,11 +154,15 @@ class SleepInhibitGUI(GObject):
 
     def set_icon_disabled(self, menuitem):
         '''Switches the indicator icon to show that sleep is possible.'''
+        if not menuitem:
+            menuitem = self.inhibit_menu_item
         self.AppInd.set_icon(self.icon_off)
         menuitem.set_label('Inhibit Sleep')
 
     def set_icon_enabled(self, menuitem):
         '''Switches the indicator icon to show that sleep is inhibited.'''
+        if not menuitem:
+            menuitem = self.inhibit_menu_item
         self.AppInd.set_icon(self.icon_on)
         menuitem.set_label('Enable Sleep')
 

@@ -23,7 +23,7 @@ This module contains various utility functions.
 
 import subprocess
 from gi.repository import Gio, GdkPixbuf
-from sleepinhibit.settings import get_config
+from sleepinhibit.config import get_config
 
 def cmd_output(*args, **kwargs):
     '''Wrap subprocess.check_output to avoid having to do conversions, strip, etc.'''

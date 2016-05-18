@@ -23,7 +23,7 @@ gi.require_version('AppIndicator3', '0.1')
 gi.require_version('GdkPixbuf', '2.0')
 import os
 
-from sleepinhibit.settings import get_config
+from sleepinhibit.config import get_config
 from sleepinhibit.startup import main
 
 config = get_config()

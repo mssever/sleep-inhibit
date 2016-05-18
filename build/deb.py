@@ -10,7 +10,7 @@ from os.path import join
 from email.utils import formatdate
 
 from sleepinhibit.util import cmd_output
-from sleepinhibit.settings import get_config
+from sleepinhibit.config import get_config
 
 def main(basedir):
     '''Do the build. `basedir` is the project root directory.'''

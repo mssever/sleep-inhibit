@@ -24,7 +24,7 @@ from gi.repository.GObject import GObject
 from gi.repository import Gtk, AppIndicator3, Gdk
 
 from sleepinhibit import util
-from sleepinhibit.settings import get_config
+from sleepinhibit.config import get_config
 from sleepinhibit.gui.prefs import PreferencesDialog
 
 class SleepInhibitGUI(GObject):

@@ -1,0 +1,11 @@
+  // This is the default configuration for sleep_inhibit.py. Anything in this file
+ // will be the configuration unless overridden by user settings. There should be
+// nothing in this file which shouldn't be overridden.
+{
+    "autostart": false,
+    "battery_percent_enabled": true,
+    "battery": true,
+    "batt_percent": 50,
+    "start_inhibited": false,
+    "icon_theme": "dark"
+}

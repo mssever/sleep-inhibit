@@ -43,6 +43,7 @@ def get_settings():
 class _SettingsObject(Collection):
     '''The class which stores settings. Don't create an instance directly.
     instead, use get_settings().'''
+
     def __init__(self):
         ''' Initialize.
         In addition to regular init, this method also initializes certain
@@ -55,11 +56,9 @@ class _SettingsObject(Collection):
         self.config_file = '{}/.config/sleep_inhibit.json'.format(os.environ['HOME'])
         # self.managed_settings holds the settings which should be saved to disk,
         # as well as their default (initial) values.
-        self.managed_settings = {'autostart': False,
-                                 'battery_percent_enabled': True,
-                                 'battery': True, 'batt_percent': 50,
-                                 'start_inhibited': False,
-                                 'icon_theme': 'dark'}
+        with open(os.path.realpath(__file__ + '/../data/managed_settings.json')) as f:
+            data = '\n'.join(line.strip() for line in f.readlines() if not line.strip().startswith('//'))
+            self.managed_settings = json.loads(data)
         if not os.path.isfile(self.config_file):
             with open(self.config_file, 'w') as f:
                 f.write('//\n//\n{}\n')
@@ -70,8 +69,8 @@ class _SettingsObject(Collection):
     def _init_settings(self):
         '''Initialize settings from the config file.'''
         with open(self.config_file) as f:
-            lines = f.readlines()
-            data = json.loads('\n'.join(lines[2:]))
+            lines = [line.strip() for line in f.readlines() if not line.strip().startswith('//')]
+            data = json.loads('\n'.join(lines))
         for key, value in data.items():
             self.__setattr__(key, value)
 

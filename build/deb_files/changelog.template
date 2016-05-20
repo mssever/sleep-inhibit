@@ -1,5 +1,0 @@
-sleep-inhibit (1.0.0-beta-1) unstable; urgency=medium
-
-  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
-
- -- Scott Severance <scott@scottseverance.us>  Thu, 12 May 2016 23:26:57 -0500

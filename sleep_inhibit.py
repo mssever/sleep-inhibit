@@ -17,20 +17,26 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
+if 'DISPLAY' not in os.environ or not os.environ['DISPLAY']:
+    if __name__ == '__main__':
+        exit('This program must be run from a graphical (X) session, and DISPLAY must be properly set.')
+    else:
+        print("Many features require a graphical environment, which you don't seem to have. When importing this module, it's your responsibility to ensure that you don't call any such code.")
+
 import gi
 gi.require_version('Gtk', '3.0')
 gi.require_version('AppIndicator3', '0.1')
 gi.require_version('GdkPixbuf', '2.0')
-import os
 
 from sleepinhibit.config import get_config
 from sleepinhibit.startup import main
 
 config = get_config()
 config.start_file = os.path.realpath(__file__)
-config.program_dir = '{}/sleepinhibit'.format(os.path.dirname(os.path.realpath(__file__)))
+config.program_dir = '{}/sleepinhibit'.format(os.path.dirname(config.start_file))
 config.desktop_filename = '{}/.config/autostart/sleep_inhibit.desktop'.format(os.environ['HOME'])
-config.version = '1.0.0~beta'
+config.version = '1.0.0~beta2'
 config.inhibitor_interval = 3 # Value is in minutes
 
 if __name__ == '__main__':

@@ -36,6 +36,10 @@ def dependencies_are_satisfied():
         subprocess.call('xdotool', stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     except FileNotFoundError:
         return False
+    except subprocess.CalledProcessError as e:
+        print('Error: xprintidle said: "{}"'.format(e.stderr))
+        #print(repr(e))
+        return False
     return True
 
 def parse_args():
@@ -83,8 +87,6 @@ def main():
     config = get_config()
     if not dependencies_are_satisfied():
         return 'This program depends on xprintidle and xdotool being installed.'
-    #if args.battery and not battery.acpi_available():
-    #    return '--battery is only available if you have the acpi command on your system.'
     config.acpi_available = battery.acpi_available()
     if args.delete:
         config = get_config()

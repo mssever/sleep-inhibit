@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Sleep-inhibit : A small indicator to prevent your Linux computer from sleeping">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Sleep-inhibit</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/mssever/sleep-inhibit">View on GitHub</a>
+
+          <h1 id="project_title">Sleep-inhibit</h1>
+          <h2 id="project_tagline">A small indicator to prevent your Linux computer from sleeping</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/mssever/sleep-inhibit/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/mssever/sleep-inhibit/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="sleep-inhibitor" class="anchor" href="#sleep-inhibitor" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Sleep Inhibitor</h1>
+
+<p>A small indicator to prevent your Linux computer from sleeping. It works by
+creating an icon and a menu where you can choose to inhibit sleep or not. There
+are preferences available to autostart, to start in inhibit mode, and to control
+what Sleep Inhibit does when you're running on battery.</p>
+
+<h2>
+<a id="getting-sleep-inhibitor" class="anchor" href="#getting-sleep-inhibitor" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting Sleep Inhibitor</h2>
+
+<p>There are several options for getting Sleep Inhibitor:</p>
+
+<ol>
+<li>
+<p>You can use <code>git</code> to get the most recent stable version. Run this command:</p>
+
+<pre><code>git clone 'https://github.com/mssever/sleep-inhibit.git'
+</code></pre>
+</li>
+<li><p>You can <a href="https://github.com/mssever/sleep-inhibit/releases/latest">download the most recent release</a>. Downloading the source <code>tar.gz</code> is best. The source <code>zip</code> may have incorrect permissions. Just extract the source and you're good to go.</p></li>
+</ol>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>No installation is needed. Simply launch <code>sleep_inhibit.py</code> in the base directory.
+You can use the preferences dialog to configure autostart if you want.</p>
+
+<h4>
+<a id="detailed-instructions" class="anchor" href="#detailed-instructions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Detailed Instructions</h4>
+
+<ol>
+<li>Place the app directory wherever you want the app to live. Having it on your <code>$PATH</code> is <em>not</em> necessary.</li>
+<li>Install the dependencies (see below).</li>
+<li>From the directory you installed, run <code>sleep_inhibit.py</code>.</li>
+<li>If you want the app to automatically start every time you log in, open the icon's menu, select Preferences, and enable it in the preferences window. (This installation won't make Sleep Inhibitor available from your system menu, so enabling autostart is recommended to prevent you from having to launch it from the command line every time. Alternatively, you can create and install a <code>.deb</code> file if your system supports it, which will add Sleep Inhibitor to the system menu. Instructions for creating a <code>.deb</code> file are below.)</li>
+<li>If you decide to uninstall it, quit Sleep Inhibit, then run <code>cleanup.py</code>, being sure to answer yes to all questions. Then delete the directory, and all traces will be gone.</li>
+</ol>
+
+<h2>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dependencies</h2>
+
+<p>Sleep Inhibit requires <code>xdotool</code> and <code>xprintidle</code> to be installed as commands on
+your <code>$PATH</code>. If you want to modify behavior based on whether you're running on
+battery, you'll also need the <code>acpi</code> command available.</p>
+
+<p>In Ubuntu, you can satisfy all the dependencies by issuing this command (desktop users may omit <code>acpi</code>):</p>
+
+<pre><code>sudo apt install xdotool xprintidle acpi
+</code></pre>
+
+<h2>
+<a id="install-from-package" class="anchor" href="#install-from-package" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Install from Package</h2>
+
+<p>Ubuntu users (and probably Debian users) can build and install a <code>.deb</code> package from the source.</p>
+
+<ol>
+<li>
+<p>Install build dependencies. You can remove them after the package is created, if you want.</p>
+
+<pre><code>sudo apt install packaging-dev dpkg-deb dh-make
+</code></pre>
+</li>
+<li><p>Download and extract Sleep Inhibitor, then point your terminal to the source directory.</p></li>
+<li>Run <code>./build_package.py --deb</code> to build the package.</li>
+<li>
+<p>Install the resulting <code>.deb</code> file, found in the directory <code>builddir</code>. Here's one way to do it:</p>
+
+<pre><code>gdebi-gtk builddir/*.deb
+</code></pre>
+</li>
+</ol>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Sleep-inhibit maintained by <a href="https://github.com/mssever">mssever</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>

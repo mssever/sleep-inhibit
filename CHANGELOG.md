@@ -1,4 +1,4 @@
-## [Unreleased]
+## [1.0.0]
 ### Added
 - System to build .deb files
 

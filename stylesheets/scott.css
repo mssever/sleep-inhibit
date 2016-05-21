@@ -1,0 +1,24 @@
+#project_title img {
+    border: none;
+    padding: 0;
+    margin: 0;
+    vertical-align: sub;
+}
+
+a.zip_download_link, a.tar_download_link {
+  display: block;
+  float: right;
+  width: 90px;
+  height:70px;
+  text-indent: 0;
+  overflow: auto;
+  background: #f2f2f2;
+}
+
+a.tar_download_link {
+  margin-left: 10px;
+}
+
+a.zip_download_link:hover, a.tar_download_link:hover {
+  background: #212121;
+}

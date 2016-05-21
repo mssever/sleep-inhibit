@@ -11,12 +11,23 @@ a.zip_download_link, a.tar_download_link {
   width: 90px;
   height:70px;
   text-indent: 0;
-  overflow: auto;
+  overflow: visible;
   background: #f2f2f2;
+  line-height: 1em;
+  text-decoration: underline;
+  border: solid #212121;
+  border-width: 1px 1px 1px 0px;
+  text-align: center;
+  padding-top: 0.5em;
 }
 
 a.tar_download_link {
   margin-left: 10px;
+  border-left-width: 1px;
+}
+
+a.zip_download_link {
+  color: #E2382D;
 }
 
 a.zip_download_link:hover, a.tar_download_link:hover {

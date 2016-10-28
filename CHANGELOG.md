@@ -1,3 +1,13 @@
+## [Unreleased]
+### Fixed
+- Docstring for `sleepinhibit.config._settingsObject.init` was outdated and hadn't
+been updated.
+
+### Cleaned up
+- API improvements for `sleepinhibit.collection.Collection`
+- Adjusted `sleepinhibit.config._SettingsObject` to use the revised API instead of
+  calling `__setattr__` directly.
+
 ## [1.0.0]
 ### Added
 - System to build .deb files

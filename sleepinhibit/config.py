@@ -47,10 +47,9 @@ class _SettingsObject(Collection):
     def __init__(self):
         ''' Initialize.
         In addition to regular init, this method also initializes certain
-        settings to hard-coded values, which may be overwritten by
-        init_settings(), and looks for a config file at a hard-coded location.
-
-        TODO: Factor these hard-coded items out to a file under sleepinhibit/data.
+        settings to values found under data/managed_settings.json, which may be
+        overwritten by init_settings(), and looks for a config file at a
+        hard-coded location (~/.config/sleep_inhibit.json).
         '''
         Collection.__init__(self)
         self.config_file = '{}/.config/sleep_inhibit.json'.format(os.environ['HOME'])
@@ -63,7 +62,7 @@ class _SettingsObject(Collection):
             with open(self.config_file, 'w') as f:
                 f.write('//\n//\n{}\n')
         for key, value in self.managed_settings.items():
-            Collection.__setattr__(self, key, value)
+            self.add_property(key, value)
         self._init_settings()
 
     def _init_settings(self):
@@ -72,7 +71,7 @@ class _SettingsObject(Collection):
             lines = [line.strip() for line in f.readlines() if not line.strip().startswith('//')]
             data = json.loads('\n'.join(lines))
         for key, value in data.items():
-            self.__setattr__(key, value)
+            self.update_property(key, value)
 
     def save_settings(self):
         '''Save managed settings to the configuration file.

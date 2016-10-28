@@ -41,7 +41,7 @@ class Collection(object):
         #self.__dict__.update(kwargs)
 
     def __setattr__(self, name, value):
-        '''Not to be called directly except perhaps in subclasses.'''
+        '''Not to be called directly.'''
         if name in self._contained_items:
             object.__setattr__(self, name, value)
         else:
@@ -50,11 +50,25 @@ class Collection(object):
     def add_property(self, key, value):
         '''Adds a property with error-checking.
 
-        Equivalant to self.key = value'''
+        Equivalant to self.key = value
+
+        Raises ValueError if key already exists. If you don't care whether key
+        already exists, use update_property instead.'''
         if key in (dir(self) or self._contained_items):
             raise ValueError('The key "{}" is already in use.'.format(key))
         object.__setattr__(self, key, value)
         self._contained_items.add(key)
+
+    def update_property(self, key, value):
+        '''Updates a property, creating it if it doesn't already exist.
+
+        Raises ValueError if key is a method used by this class.'''
+        if key in self._contained_items:
+            self.__setattr__(key, value)
+        else:
+            if 'method' in str(type(getattr(self, key, ''))):
+                raise ValueError('The name "{}" references a method on this object and thus is reserved.'.format(key))
+            self.add_property(key, value)
 
     def rm(self, *args):
         '''Deletes the listed properties'''

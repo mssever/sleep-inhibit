@@ -3,6 +3,9 @@
 - Docstring for `sleepinhibit.config._settingsObject.init` was outdated and hadn't
 been updated.
 
+### Added
+- Type checking decorators
+
 ### Cleaned up
 - API improvements for `sleepinhibit.collection.Collection`
 - Adjusted `sleepinhibit.config._SettingsObject` to use the revised API instead of

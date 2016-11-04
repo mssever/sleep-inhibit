@@ -25,10 +25,11 @@ import os
 
 from gi.repository import GLib
 
-from sleepinhibit import util, battery
+from sleepinhibit import util, battery, type_check
 from sleepinhibit.config import get_config
 import sleepinhibit.gui.main
 
+@type_check.returns(bool)
 def dependencies_are_satisfied():
     '''Return True if all dependencies are satisfied.'''
     try:
@@ -81,6 +82,7 @@ def parse_args():
     add('--mode', type=str, default='indicator', help=mode)
     return parser.parse_args()
 
+@type_check.returns(int)
 def main():
     '''Dispatches control to the appropriate parts of the app'''
     args = parse_args()

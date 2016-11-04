@@ -23,7 +23,9 @@ Contains functions for interacting with the battery.
 
 import re
 from sleepinhibit.util import cmd_output
+from sleepinhibit.type_check import *
 
+@returns(bool)
 def acpi_available():
     '''Return True if the command 'acpi' is available on the system.'''
     try:
@@ -32,6 +34,7 @@ def acpi_available():
         return False
     return True
 
+@returns(dict)
 def info():
     '''Return a dictionary of battery info with the following keys:
 

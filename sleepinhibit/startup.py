@@ -56,6 +56,14 @@ def parse_args():
         else:
             raise TypeError('Invalid Percentage!')
 
+    def mode(s):
+        '''Determines whether the mode is a valid value (indicator or
+        inhibit-process). Raises TypeError if not.'''
+        if s == 'indicator' or s == 'inhibit-process':
+            return s
+        else:
+            raise TypeError('Mode must be either "indicator" or "inhibit-process"')
+
     parser = ArgumentParser(description='''Indicator to prevent
         computer from sleeping. It depends on the commands xprintidle and
         xdotool being properly installed on your system. If they aren't
@@ -70,7 +78,7 @@ def parse_args():
         running on battery and the battery charge is less than PERCENTAGE
         percent.'''
     delete = 'Delete all saved configuration and exit.'
-    mode = '''NOT NORMALLY CALLED MANUALLY! The mode can be either indicator
+    mode_h = '''NOT NORMALLY CALLED MANUALLY! The mode can be either indicator
         (default) or inhibit-process. If mode is indicator, then an indicator
         icon is created. inhibit-process is to be called by the indicator. When
         sleep is inhibited, it runs, preventing sleep.'''
@@ -79,7 +87,7 @@ def parse_args():
     add('-b', '--battery', metavar="True or False", type=bool, help=batt)
     add('-p', '--percent', metavar="PERCENTAGE", type=percentage, help=pct)
     add('--delete', action='store_true', help=delete)
-    add('--mode', type=str, default='indicator', help=mode)
+    add('--mode', type=mode, default='indicator', help=mode_h)
     return parser.parse_args()
 
 @type_check.returns(int)
@@ -122,5 +130,4 @@ def main():
             run(**kw)
         except KeyboardInterrupt:
             return 0
-    else:
-        return 'ERROR: Invalid value for --mode!'
+    else: return 42

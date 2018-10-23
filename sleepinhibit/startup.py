@@ -22,6 +22,7 @@
 from argparse import ArgumentParser
 import subprocess
 import os
+import sys
 
 from gi.repository import GLib
 
@@ -59,7 +60,7 @@ def parse_args():
     def mode(s):
         '''Determines whether the mode is a valid value (indicator or
         inhibit-process). Raises TypeError if not.'''
-        if s == 'indicator' or s == 'inhibit-process':
+        if s in ('indicator', 'inhibit-process'):
             return s
         else:
             raise TypeError('Mode must be either "indicator" or "inhibit-process"')
@@ -96,7 +97,8 @@ def main():
     args = parse_args()
     config = get_config()
     if not dependencies_are_satisfied():
-        return 'This program depends on xprintidle and xdotool being installed.'
+        sys.stderr.write('This program depends on xprintidle and xdotool being installed.\n')
+        return 1
     config.acpi_available = battery.acpi_available()
     if args.delete:
         config = get_config()

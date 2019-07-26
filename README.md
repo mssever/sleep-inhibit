@@ -30,9 +30,12 @@ Sleep Inhibit requires `xdotool` and `xprintidle` to be installed as commands on
 your `$PATH`. If you want to modify behavior based on whether you're running on
 battery, you'll also need the `acpi` command available.
 
+You also need `gir1.2-appindicator3-0.1`. This might or might not be
+installed on your system already.
+
 In Ubuntu, you can satisfy all the dependencies by issuing this command (desktop users may omit `acpi`):
 
-    sudo apt install xdotool xprintidle acpi
+    sudo apt install xdotool xprintidle  gir1.2-appindicator3-0.1 acpi
 
 ## Install from Package
 Ubuntu users (and probably Debian users) can build and install a `.deb` package from the source.

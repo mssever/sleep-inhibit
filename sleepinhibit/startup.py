@@ -68,9 +68,7 @@ def parse_args():
     parser = ArgumentParser(description='''Indicator to prevent
         computer from sleeping. It depends on the commands xprintidle and
         xdotool being properly installed on your system. If they aren't
-        installed already, please install them. Also, the icons are taken from
-        caffeine-plus, so if it isn't installed, you will probably see a broken
-        icon.''')
+        installed already, please install them.''')
     inhibit = 'Start with sleep inhibited.'
     batt = '''Don't inhibit sleep when running on battery. May be combined with
         -p/--percent. IMPORTANT NOTE: This option requires the presence of the
@@ -84,7 +82,7 @@ def parse_args():
         icon is created. inhibit-process is to be called by the indicator. When
         sleep is inhibited, it runs, preventing sleep.'''
     add = parser.add_argument
-    add('-i', '--inhibit', metavar="True or False", type=bool, help=inhibit)
+    add('-i', '--inhibit', action='store_true', help=inhibit)
     add('-b', '--battery', metavar="True or False", type=bool, help=batt)
     add('-p', '--percent', metavar="PERCENTAGE", type=percentage, help=pct)
     add('--delete', action='store_true', help=delete)
@@ -114,7 +112,7 @@ def main():
         if args.percent is not None:
             config.batt_percent = args.percent
         inhibitor = sleepinhibit.gui.main.SleepInhibitGUI()
-        if config.start_inhibited or args.inhibit:
+        if args.inhibit or config.start_inhibited:
             inhibitor.on_toggle()
         try:
             GLib.MainLoop().run()

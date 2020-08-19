@@ -67,7 +67,9 @@ target/
 
 # Editor stuff
 *.geany
+*.swp
 
 # Misc
 iconlist.py
 tmp/
+nohup.out

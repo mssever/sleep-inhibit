@@ -36,7 +36,7 @@ config = get_config()
 config.start_file = os.path.realpath(__file__)
 config.program_dir = '{}/sleepinhibit'.format(os.path.dirname(config.start_file))
 config.desktop_filename = '{}/.config/autostart/sleep_inhibit.desktop'.format(os.environ['HOME'])
-config.version = '1.0.1'
+config.version = '1.0.2'
 config.inhibitor_interval = 3 # Number of minutes of inactivity between activating keyboard
 
 if __name__ == '__main__':

@@ -22,6 +22,16 @@ from gi.repository import Gtk, Gdk, GLib, GdkPixbuf
 from sleepinhibit import util
 from sleepinhibit.config import get_config
 
+def _add_switch(grid, label_name, active, callback, row_counter):
+    switch = Gtk.Switch()
+    switch.set_active(active)
+    switch.connect('notify::active', callback)
+    label = Gtk.Label(label_name)
+    label.set_halign(Gtk.Align.START)
+    grid.attach(label, 0, row_counter, 1, 1)
+    grid.attach(switch, 1, row_counter, 1, 1)
+    return (label, switch, row_counter+1)
+
 class PreferencesDialog(Gtk.Window):
     '''The code to power the preferences dialog'''
 
@@ -48,10 +58,10 @@ class PreferencesDialog(Gtk.Window):
         icon_label = Gtk.Label('Which indicator icon set do you want to use?')
         icon_label.set_halign(Gtk.Align.START)
         icon_light = Gtk.ToggleButton()
-        icon_light_img = Gtk.Image.new_from_pixbuf(util.app_icon('indicator_sleep', theme='light').scale_simple(22, 22, GdkPixbuf.InterpType.BILINEAR))
+        icon_light_img = Gtk.Image.new_from_pixbuf(util.app_icon('indicator_sleep', theme='light').scale_simple(32, 32, GdkPixbuf.InterpType.BILINEAR))
         icon_light.set_image(icon_light_img)
         icon_dark = Gtk.ToggleButton()
-        icon_dark.set_image(Gtk.Image.new_from_pixbuf(util.app_icon('indicator_sleep', theme='dark').scale_simple(22, 22, GdkPixbuf.InterpType.BILINEAR)))
+        icon_dark.set_image(Gtk.Image.new_from_pixbuf(util.app_icon('indicator_sleep', theme='dark').scale_simple(32, 32, GdkPixbuf.InterpType.BILINEAR)))
         self.icon_light = icon_light
         self.icon_dark = icon_dark
         if config.icon_theme == 'light':
@@ -69,27 +79,18 @@ class PreferencesDialog(Gtk.Window):
         grid.attach(icon_grid, 1, row_counter, 1, 1)
         row_counter += 1
 
-        inhibited_switch = Gtk.Switch()
-        self.inhibited_switch = inhibited_switch
-        inhibited_switch.set_active(config.start_inhibited)
-        inhibited_switch.connect('notify::active', self.on_start_inhibited_toggle)
-        inhibited_label = Gtk.Label('Start Sleep Inhibitor in inhibited mode: ')
-        self.inhibited_label = inhibited_label
-        inhibited_label.set_halign(Gtk.Align.START)
-        grid.attach(inhibited_label, 0, row_counter, 1, 1)
-        grid.attach(inhibited_switch, 1, row_counter, 1, 1)
-        row_counter += 1
-
-        autostart_switch = Gtk.Switch()
-        self.autostart_switch = autostart_switch
-        autostart_switch.set_active(config.autostart)
-        autostart_switch.connect('notify::active', self.on_autostart_toggle)
-        autostart_label = Gtk.Label('Automatically start Sleep Inhibitor when you log in: ')
-        self.autostart_label = autostart_label
-        autostart_label.set_halign(Gtk.Align.START)
-        grid.attach(autostart_label, 0, row_counter, 1, 1)
-        grid.attach(autostart_switch, 1, row_counter, 1, 1)
-        row_counter += 1
+        self.inhibited_label, self.inhibited_switch, row_counter = _add_switch(
+                grid,
+                'Start Sleep Inhibitor in inhibited mode: ',
+                config.start_inhibited,
+                self.on_start_inhibited_toggle,
+                row_counter)
+        self.autostart_label, self.autostart_switch, row_counter = _add_switch(
+                grid,
+                'Automatically start Sleep Inhibitor when you log in: ',
+                config.autostart,
+                self.on_autostart_toggle,
+                row_counter)
 
         if not config.acpi_available:
             grid.attach(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL), 0, row_counter, 2, 1)
@@ -102,30 +103,22 @@ consideration, please install the <tt>acpi</tt> command and restart Sleep Inhibi
             grid.attach(acpi_label, 0, row_counter+1, 2, 1)
             row_counter += 2
 
-        battery_switch = Gtk.Switch()
-        self.battery_switch = battery_switch
-        battery_switch.set_active(not config.battery)
-        battery_switch.connect('notify::active', self.on_battery_toggle)
-        battery_label = Gtk.Label("Always inhibit sleep when on battery: ")
-        self.battery_label = battery_label
-        battery_label.set_halign(Gtk.Align.START)
-        grid.attach(battery_label, 0, row_counter, 1, 1)
-        grid.attach(battery_switch, 1, row_counter, 1, 1)
-        row_counter += 1
+        self.battery_label, self.battery_switch, row_counter = _add_switch(
+                grid,
+                'Always inhibit sleep when on battery: ',
+                not config.battery,
+                self.on_battery_toggle,
+                row_counter)
 
         grid.attach(separator, 0, row_counter, 2, 1)
         row_counter += 1
 
-        pct_enable_switch = Gtk.Switch()
-        self.pct_enable_switch = pct_enable_switch
-        pct_enable_switch.set_active(config.battery_percent_enabled)
-        pct_enable_switch.connect('notify::active', self.on_pct_enable_toggle)
-        pct_enable_label = Gtk.Label("When on battery, inhibit if the battery is at least the level below: ")
-        pct_enable_label.set_halign(Gtk.Align.START)
-        self.pct_enable_label = pct_enable_label
-        grid.attach(pct_enable_label, 0, row_counter, 1, 1)
-        grid.attach(pct_enable_switch, 1, row_counter, 1, 1)
-        row_counter += 1
+        self.pct_enable_label, self.pct_enable_switch, row_counter = _add_switch(
+                grid,
+                'When on battery, inhibit if the battery is at least the level below: ',
+                config.battery_percent_enabled,
+                self.on_pct_enable_toggle,
+                row_counter)
 
         if config.batt_percent is not None:
             pct = config.batt_percent
@@ -152,18 +145,18 @@ consideration, please install the <tt>acpi</tt> command and restart Sleep Inhibi
         grid.attach(close, 1, row_counter, 1, 1)
         row_counter += 1
 
-        if battery_switch.props.active or not config.acpi_available:
-            pct_enable_switch.props.sensitive = False
-            pct_enable_label.props.sensitive = False
-            pct_button.props.sensitive = False
-            pct_label.props.sensitive = False
+        if self.battery_switch.props.active or not config.acpi_available:
+            self.pct_enable_switch.props.sensitive = False
+            self.pct_enable_label.props.sensitive = False
+            self.pct_button.props.sensitive = False
+            self.pct_label.props.sensitive = False
         else:
-            if not pct_enable_switch.props.active:
-                pct_button.props.sensitive = False
-                pct_label.props.sensitive = False
+            if not self.pct_enable_switch.props.active:
+                self.pct_button.props.sensitive = False
+                self.pct_label.props.sensitive = False
         if not config.acpi_available:
-            battery_switch.props.sensitive = False
-            battery_label.props.sensitive = False
+            self.battery_switch.props.sensitive = False
+            self.battery_label.props.sensitive = False
 
     @staticmethod
     def on_start_inhibited_toggle(switch, *args): # *args: was gparm
